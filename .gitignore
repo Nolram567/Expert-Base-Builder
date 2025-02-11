@@ -1,0 +1,12 @@
+/shelf/
+/workspace.xml
+outputs/
+data/
+activities_response.json
+expert_base.yml
+json_ld_player.py
+misc.xml
+modules.xml
+profiles_settings.xml
+.name
+expert_base_aggregator.iml

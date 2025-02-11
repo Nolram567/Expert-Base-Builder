@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "expert-base-builder"
+version = "0.1.0"
+description = "Mit diesem Paket wird die HERMES Expert Base gebaut."
+authors = ["M. George"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+requests = "^2.32.3"
+pyyaml = "^6.0.2"
+chevron = "^0.14.0"
+beautifulsoup4 = "^4.13.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
