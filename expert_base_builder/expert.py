@@ -81,7 +81,7 @@ class Expert:
             n: Spezifiziert, wie viele Beschäftigungsverhältnisse maximal aufgenommen werden sollen.
 
         Returns:
-            Die derzeitigen Beschäftigungsverhältnisse als auflistung in natürlicher Sprache aus als Liste aus Tripeln mit Strings.
+            Die derzeitigen Beschäftigungsverhältnisse als Auflistung in natürlicher Sprache oder als Liste aus Tripeln mit Strings.
         """
         current_employment = self.properties.get("Derzeitige Beschäftigung", [])
 
