@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class Expert:
     """
-    Objekte dieser Klasse repräsentieren einen Experten der HERMES-Expertbase.
+    Objekte dieser Klasse repräsentieren einen Experten der HERMES-Expert-Base.
 
     Diese Klasse stellt Methoden zur Verfügung, um einzelne Experten zu erstellen, zu verwalten und in semantische
     Repräsentationen zu übersetzen.
@@ -57,7 +57,7 @@ class Expert:
         Diese Methode gibt den Namen des Expertenobjekts zurück.
 
         Args:
-            formated: Spezifiziert, ob die Rückgabe als Einzelstring formatiert zurückgegeben werden soll oder als Tupel mit dem Vor- und Nachnamen.
+            formated: Spezifiziert, ob der Name als Einzelstring formatiert zurückgegeben werden soll oder als Tupel mit dem Vor- und Nachnamen.
         """
         return (
             f"{self.properties.get('Vorname', '')} {self.properties.get('Nachname', '')}"
@@ -74,14 +74,14 @@ class Expert:
         """
         Diese Methode gibt die derzeitige Beschäftigung zurück. Entweder als Liste von Tripeln oder als String, der das
         oder die Arbeitsverhältnisse in natürlicher Sprache beschreibt.
-        Die Methode greif auf das Modul llm_transformer zurück, um aus strukturierten Daten natürliche Sprache zu generieren.
+        Die Methode greift auf das Modul llm_transformer zurück, um aus strukturierten Daten natürliche Sprache zu generieren.
 
         Args:
             formated: Spezifiert, ob die Rückgabe in natürlicher Sprache formatiert sein soll.
             n: Spezifiziert, wie viele Beschäftigungsverhältnisse maximal aufgenommen werden sollen.
 
         Returns:
-            Die derzeitigen Beschäftigungsverhältnisse als auflistung in natürlicher Sprache aus als Liste aus Tripeln mit Strings.
+            Die derzeitigen Beschäftigungsverhältnisse als Auflistung in natürlicher Sprache aus als Liste aus Tripeln mit Strings.
         """
         current_employment = self.properties.get("Derzeitige Beschäftigung", [])
 
@@ -139,7 +139,7 @@ class Expert:
 
     def extend_properties(self, property, value) -> None:
         """
-        Die Methode erweitert oder ersetzt die Eigenschaften des Experten Objekts.
+        Die Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
 
         Args:
             property: Der Name der Eigenschaft.
@@ -149,7 +149,7 @@ class Expert:
 
     def parse_qmd(self, path) -> None:
         """
-        Die Methode generiert auf der Grundlage des Experten-Objekts eine qmd-Seite für den HERMES Hub.
+        Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
         Args:
             output_path: Der relative Pfad des qmd-Dokuments
