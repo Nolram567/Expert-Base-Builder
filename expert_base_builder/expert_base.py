@@ -1,6 +1,5 @@
 from .orcid_aggregator import *
 from expert_base_builder.expert import Expert
-import os
 import logging
 import yaml
 
@@ -20,10 +19,6 @@ class ExpertBase():
     Die Klassenvariable PROPERTIES enthält alle zulässigen Eigenschaften.
     """
 
-    INPUT_PATH = "data"
-    OUTPUT_PATH = "outputs"
-    PROPERTIES = ["Vorname", "Nachname", "Derzeitige Beschäftigung", "Forschungsinteressen"]
-
     def __init__(self, filename: str, from_csv: bool = True):
         """
         Der Konstruktor der Klasse enthält eine Fallunterscheidung. Entweder wird das ExpertBase-Objekt auf der Grundlage
@@ -33,25 +28,28 @@ class ExpertBase():
             filename: Der Name der Quelldatei.
             from_csv: Wenn True, dann wird das Objekt mit einer CSV-Datei befüllt.
         """
+        self.raw_base = {}
+        self.base = {}
+
         if from_csv:
             self.populate_from_csv(filename)
         else:
             self.deserialize_expert_base(filename)
 
-    def populate_from_csv(self, filename: str) -> None:
+    def populate_from_csv(self, path: str) -> None:
         """
         Diese Methode füllt das ExpertBase-Objekt auf Grundlage einer CSV-Datei mit ORCID's.
         Die CSV-Datei muss die folgende Struktur haben:\n
         |Spaltenname1|Spaltenname2|\n
         |    Name    |   Orcid    |
+
+        Args:
+            path: Der Dateipfad zu der CSV-Datei.
         """
 
-        full_path = os.path.join(ExpertBase.INPUT_PATH, filename)
-        orcids = read_orcids_from_csv(full_path)
-        self.base = {}
-        self.raw_base = {}
+        orcids = read_orcids_from_csv(path)
 
-        logger.info(f"Das Expert-Base-Objekt wird mit den ORCID's aus {full_path} befüllt.")
+        logger.info(f"Das Expert-Base-Objekt wird mit den ORCID's aus {path} befüllt.")
 
         for orcid in orcids:
             logger.info(f"Abfrage von ORCID {orcid}...")
@@ -67,6 +65,7 @@ class ExpertBase():
             extracted_keywords = extract_keywords(person_endpoint_data)
             extracted_employment = extract_current_employments(activities_endpoint_data)
             extracted_work = extract_work_doi(activities_endpoint_data, n = 10)
+            extracted_mail = extract_mail(person_endpoint_data)
 
             new_expert = Expert(orcid=orcid,
                                 data={
@@ -74,13 +73,14 @@ class ExpertBase():
                                     "Nachname": extracted_name["family-name"],
                                     "Derzeitige Beschäftigung": extracted_employment,
                                     "Forschungsinteressen": extracted_keywords,
+                                    "E-Mail": extracted_mail,
                                     "Veröffentlichungen": extracted_work
                                 })
 
             self.base[orcid] = new_expert
             self.raw_base[orcid] = new_expert.get_properties()
 
-        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich mit den ORCID's aus {full_path} befüllt.")
+        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich mit den ORCID's aus {path} befüllt.")
 
     def get_base(self) -> dict:
         """
@@ -94,27 +94,113 @@ class ExpertBase():
         """
         return list(self.base.values())
 
-    def deserialize_expert_base(self, filename: str):
-        pass
+    def get_orcids_as_list(self) -> List[str]:
+        """
+        Die Methode gibt die ORCIDs aller Experten in der Expert Base zurück.
+        """
+        return list(self.base.keys())
 
-    def serialize_expert_base(self, filename: str) -> int:
-        pass
+    def deserialize_expert_base(self, path: str) -> None or int:
+        """
+        Die Methode deserialisiert ein Expert Base Objekt.
 
-    def add_properties_from_csv(self, filename: str) -> int:
-        pass
+        Args:
+            path: Der Dateipfad, unter dem das Expert Base Objekt abgespeichert werden kann.
+        """
+        try:
+            with open(path, "r", encoding='utf-8') as f:
+                self.raw_base = json.load(f)
+
+            for orcid, expert in self.raw_base.items():
+
+                new_expert = Expert(orcid=orcid,
+                                    data={
+                                        "Vorname": expert.get("Vorname", ""),
+                                        "Nachname": expert.get("Nachname", ""),
+                                        "Derzeitige Beschäftigung": expert.get("Derzeitige Beschäftigung", []),
+                                        "Forschungsinteressen": expert.get("Forschungsinteressen", []),
+                                        "Veröffentlichungen": expert.get("Veröffentlichungen", [])
+                                    })
+
+                self.base[orcid] = new_expert
+
+            logger.info(f"Das Expert Base Objekt wurde erfolgreich von {path} eingelesen.")
+
+            return 0
+        except IOError as e:
+
+            logger.error(f"Fehler beim Deserialisieren der Expert Base von {path}:\n{e}")
+
+    def serialize_expert_base(self, path: str) -> None:
+        """
+        Diese Methode serialisiert das Expert Base Objekt als JSON-Datei.
+
+        Args:
+            path: Der Dateipfad, unter dem das Expert Base Objekt serialisiert werden soll.
+        """
+        with open(path, "w", encoding='utf-8') as f:
+            json.dump(self.raw_base, f, indent=4, ensure_ascii=False)
+
+        logger.info(f"Das Expert Base Objekt wurde erfolgreich unter {path} serialisiert.")
+
+    def add_properties_from_csv(self, path: str) -> None:
+        """
+        Mit dieser Datei können die Eigenschaften der Experten in der Expert Base erweitert oder überschrieben werden.
+        Die Eigenschaften werden in einer CSV-Datei nach dem folgenden Muster definiert:
+
+        |name|orcid|neue_eigenschaft|neue_eigenschaft_2|(...)\n
+        |(..)|(...)|(..............)|(................)|(...)\n
+        (...)
+
+        Args:
+             path: Der Dateipfad zu der CSV-Datei.
+        """
+        try:
+            csv_file = open(path, newline='', encoding='utf-8')
+            reader = csv.reader(csv_file)
+            properties = next(reader)
+            orcids = self.get_orcids_as_list()
+        except IOError as e:
+            logger.error(f"Die Datei {path} konnte nicht geöffnet werden:\n {e}")
+            return
+
+        if len(properties) < 2:
+            logger.warning(f"Die CSV-Datei ist ungültig. Es muss mindestens 3 Spalten geben. Abbruch...")
+            return
+        elif not properties[1].lower() == "orcid":
+            logger.warning(f"Die CSV-Datei ist ungültig. In der zweiten Spalte muss die ORCID stehen und die Spalte"
+                         f" muss gültig benannt sein.")
+            return
+
+        for row in reader:
+
+            current_orcid = row[1]
+
+            if current_orcid in orcids:
+                current_expert = self.base[current_orcid]
+                for i, property in enumerate(properties[2:], 1):
+
+                    current_expert.extend_properties(property, row[1+i])
+
+                    self.raw_base[current_orcid][property] = row[1+i]
+
+                    logger.info(f"Für den Experten {current_orcid} wurde die Eigenschaft '{property}'"
+                                f" mit dem Wert '{row[1+i]}' angelegt oder überschrieben.")
+            else:
+                logger.warning(f"Der Experte {current_orcid} ist noch nicht Teil der Expert Base.")
 
     def pretty_print(self) -> None:
         """
-        Diese Methode druckt das ExpertBase lesbar auf der Konsole.
+        Diese Methode druckt die Expert Base lesbar auf der Konsole.
         """
         print(json.dumps(self.raw_base, indent=4, ensure_ascii=False))
 
-    def parse_yml(self, output_file) -> None:
+    def parse_yml(self, path: str) -> None:
         """
         Diese Methode parst ein ExpertBase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
-            output_file: Der Dateipfad und der Name der Ausgabedatei.
+            path: Der Dateipfad und der Name der Ausgabedatei.
         """
 
         logger.info(f"Das Expert-Base-Objekt wird zu einer YAML-Datei geparst.")
@@ -125,24 +211,21 @@ class ExpertBase():
 
             name = expert.get_name(formated=False)
             research_interest = expert.get_research_interest(formated=True)
-            orcid = f'<p><a href="https://orcid.org/{expert.get_orcid()}">{expert.get_orcid()} <img src="orcid.png" alt="orcid" width="16" height="16"></a></p>'
-            linked_name = f'<a href="www.hermes-hub.de/vernetzen/experts/{name[0]}-{name[1]}.html">{expert.get_name(formated=True)}</a>'
-            employment = expert.get_current_employment(n = 1, formated=True)
+            linked_name = f'<a href="www.hermes-hub.de/vernetzen/experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html">{expert.get_name(formated=True)}</a>'
+            organisation = ", ". join(expert.get_organisation())
+            mail = expert.get_mail()
 
             listing_entry = {
                 "Name": linked_name,
-                "Beschäftigung": employment,
-                "Forschungsfelder": research_interest,
-                "ORCID": orcid,
-                "HERMES-Affiliation": "",
-                "TaDiRAH-Zuordnung": ""
+                "Organisation": organisation,
+                "ORCID-Keywords": research_interest,
+                "TaDiRAH-Zuordnung": "",
+                "Kontaktweg": mail
                 }
 
             entries.append(listing_entry)
 
-        full_path = os.path.join(ExpertBase.OUTPUT_PATH, output_file)
-
-        with open(full_path, "w", encoding="utf-8") as f:
+        with open(path, "w", encoding="utf-8") as f:
             yaml.dump(entries, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
-        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {full_path} gespeichert.")
+        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
