@@ -9,7 +9,9 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
     try:
         logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
 
-        expert_base = ExpertBase(csv_file)
+        expert_base = ExpertBase("data/orcids.csv", from_csv=True)
+
+        expert_base.serialize_expert_base("saved_base/expert_base.json")
 
         # Für jeden Experten eine QMD-Datei erstellen
         for e in expert_base.get_expert_as_list():
@@ -24,7 +26,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
 
 if __name__ == "__main__":
 
-    csv_file = "orcids.csv"
+    csv_file = "data/orcids.csv"
     output_qmd = "outputs/expert_qmd"
     output_yml = "expert_base.yml"
 
