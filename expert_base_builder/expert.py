@@ -103,19 +103,51 @@ class Expert:
         else:
             return self.properties.get("Derzeitige Beschäftigung", [])[:n]
 
+    def get_mail(self) -> str:
+        """
+        Diese Methode gibt die E-Mail-Adresse des Experten als String zurück.
+
+        Returns:
+            Die E-Mail-Adresse oder einen leeren String.
+        """
+        return self.properties.get("E-Mail", "")
+
+    def get_organisation(self) -> List[str]:
+        """
+        Die Methode gibt die Organisationen zurück, an denen der Experte derzeit beschäftigt ist.
+        """
+        current_employment = self.properties.get("Derzeitige Beschäftigung", [])
+        organisations = []
+
+        for employment in current_employment:
+            organisations.append(employment[2])
+
+        return organisations
+
     def get_research_interest(self, formated=True) -> List[str] or str:
+        """
+        Die Methode gibt die Forschungsinteressen (ORCID-Keywords) des Experten zurück.
+
+        Args:
+            formated: Falls True, werden die Keywords zu einem String konkateniert und mit Kommata getrennt.
+        """
+
         if formated:
             return ", ".join(self.properties.get("Forschungsinteressen", []))
         else:
             return self.properties.get("Forschungsinteressen", [])
 
-    def set_semantic_properties(self):
-        pass
+    def extend_properties(self, property, value) -> None:
+        """
+        Die Methode erweitert oder ersetzt die Eigenschaften des Experten Objekts.
 
-    def extend_properties(self):
-        pass
+        Args:
+            property: Der Name der Eigenschaft.
+            value: Der Wert der Eigenschaft.
+        """
+        self.properties[property] = value
 
-    def parse_qmd(self, output_path) -> None:
+    def parse_qmd(self, path) -> None:
         """
         Die Methode generiert auf der Grundlage des Experten-Objekts eine qmd-Seite für den HERMES Hub.
 
@@ -134,15 +166,15 @@ class Expert:
                 "expert-name": self.get_name(),
                 "orcid-domain": f"https://orcid.org/{self.get_orcid()}",
                 "current-employment": self.get_current_employment(n=3),
-                "research-interest": self.get_research_interest(),
-                "last-work": self.doi_resolver(),
+                "keywords": self.get_research_interest(),
             },
         )
 
-        output_path = os.path.join(
-            output_path,
-            f"{self.get_name(formated=False)[0].lower()}-{self.get_name(formated=False)[1].lower()}.qmd",
-        )
+        output_path = os.path.join(path,
+                            f"{self.get_name(formated=False)[0].lower().strip().replace(" ", "-")}"
+                            f"-"
+                            f"{self.get_name(formated=False)[1].lower().strip().replace(" ", "-")}"
+                            f".qmd")
 
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(formated_template)
@@ -185,3 +217,6 @@ class Expert:
                 )
 
         return formated_publications
+
+    def set_semantic_properties(self):
+        pass
