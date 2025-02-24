@@ -57,7 +57,6 @@ def triple_to_nl_sentence(tripel: tuple[str, str, str],
     try:
         response = requests.post(url, json=data, headers=headers)
 
-        #print(json.dumps(response.json(), indent=4, ensure_ascii=False))
         text = response.json().get("choices", "")[0].get("text", "").strip()
         index = text.find("\n")
 
