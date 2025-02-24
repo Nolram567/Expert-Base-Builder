@@ -13,14 +13,6 @@ mainfont: IBM Plex Sans
 
 {{ current-employment }}
 
-## Forschungsinteressen
+## ORCID-Keywords
 
-{{ research-interest }}
-
-## Die letzten Werke
-
-::: {.callout-note}
-Derzeit werden nur Publikation mit DOI erfasst und nach MLA formatiert.
-:::
-
-{{ last-work }}
+{{ keywords }}
