@@ -67,6 +67,17 @@ def extraxt_names(orcid_data: dict or None) -> Dict[str, str]:
 
     return extracted
 
+def extract_mail(orcid_data: dict or None) -> str:
+    """
+    Extrahiert die erste E-Mail-Adresse aus einem Personendatensatz.
+
+    Args:
+        orcid_data: Die ORCID-Daten vom /person-Endpunkt der ORCID-API.
+    """
+    emails = orcid_data.get("emails", {}).get("email", [])
+    email_str = emails[0].get("email", "") if emails else ""
+    return email_str
+
 def extract_current_employments(orcid_data: dict or None) -> list:
     """
     Extrahiert die derzeit aktiven Beschäftigungsverhältnisse aus einem Personendatensatz.
@@ -141,7 +152,6 @@ def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
             dois.append(current_doi)
         else:
             pass
-            #print(f"DOI nicht gefunden für:\n {json.dumps(ids, indent=4)}")
 
     return dois
 
@@ -162,10 +172,10 @@ def main(input_csv: str, output_json: str) -> None:
         person_endpoint_data = fetch_orcid_data(orcid, endpoint="person")
         activities_endpoint_data = fetch_orcid_data(orcid, endpoint="activities")
 
-        print(extract_work_doi(activities_endpoint_data, n = 3))
+        '''with open("../person_response.json", "w", encoding='utf-8') as jsonfile:
+            json.dump(person_endpoint_data, jsonfile, ensure_ascii=False, indent=4)'''
 
-        with open("activities_response.json", "w", encoding='utf-8') as jsonfile:
-            json.dump(activities_endpoint_data, jsonfile, ensure_ascii=False, indent=4)
+        print(extract_mail(person_endpoint_data))
 
         if person_endpoint_data is None:
             print(f"Fehler beim Abrufen von Daten für ORCID {orcid}")
@@ -181,10 +191,6 @@ def main(input_csv: str, output_json: str) -> None:
                                 "employments": extracted_employment
                                 })
 
-
-    '''with open(output_json, "w", encoding="utf-8") as jsonfile:
-        json.dump(aggregated_data, jsonfile, ensure_ascii=False, indent=4)
-    print(f"Daten erfolgreich in {output_json} gespeichert.")'''
 
 
 if __name__ == "__main__":
