@@ -93,13 +93,12 @@ class Expert:
                 if i == n:
                     break
                 if i == 0:
-                    current_employment_string = (
-                        f"{triple_to_nl_sentence(current_employment[i])}"
-                    )
+                    current_employment_string = f"* {triple_to_nl_sentence(current_employment[i])}"
                 else:
-                    current_employment_string = f"* {current_employment_string}\n* {triple_to_nl_sentence(current_employment[i])}"
+                    current_employment_string += f"\n* {triple_to_nl_sentence(current_employment[i])}"
 
             return current_employment_string
+
         else:
             return self.properties.get("Derzeitige Beschäftigung", [])[:n]
 
@@ -120,7 +119,8 @@ class Expert:
         organisations = []
 
         for employment in current_employment:
-            organisations.append(employment[2])
+            if employment[2] not in organisations:
+                organisations.append(employment[2])
 
         return organisations
 
