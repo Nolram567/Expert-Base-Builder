@@ -1,9 +1,19 @@
 import logging
 from expert_base_builder.expert_base import ExpertBase
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler("build_expert_base.log", mode="w", encoding="utf-8")
+file_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+console_handler = logging.StreamHandler()
+console_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(console_formatter)
+logger.addHandler(console_handler)
 
 def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
     try:
