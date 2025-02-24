@@ -66,23 +66,8 @@ def triple_to_nl_sentence(tripel: tuple[str, str, str],
 
         return text[:index]
     except requests.exceptions.RequestException:
-        logger.error(f"Stelle sich, dass lmmanager auf deinem Rechner läuft und {model} unter"
+        logger.warning(f"Stelle sich, dass lmmanager auf deinem Rechner läuft und {model} unter"
                      f"{url} erreichbar ist.\n"
                      "Das unformatierte Tripel wird zurückgegeben.")
 
         return " ".join(tripel) if not any(e is None for e in tripel) else ""
-
-
-if __name__ == "__main__":
-
-    print(triple_to_nl_sentence(
-        ("Professor", "Institut für Politikwissenschaft", "Ludwig-Maximilian-Universität München")))
-
-    print(triple_to_nl_sentence(
-        ("Wissenschaftlicher Mitarbeiter", "Institut für Informatik", "Freie Universität Berlin")))
-
-    print(triple_to_nl_sentence(
-        ("Wissenschaftlicher Mitarbeiter", "Kartographie", "Deutsche Nationalbibliothek")))
-
-    print(triple_to_nl_sentence(
-        ("Direktor", "Geschäftleitung", "Leibniz Institut für europäische Geschichte")))
