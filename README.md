@@ -22,7 +22,8 @@ Das Programmpaket befindet sich derzeit im frühen Entwicklungsstadium.
 ├── poetry.lock                # Poetry Lock-Datei, speichert die Abhängigkeiten mit festen Versionen
 ├── pyproject.toml             # Poetry-Projektkonfigurationsdatei
 ├── README.md                  # Projektdokumentation und Einführung
-└── run.py                     # Hauptdatei, die das Programm startet und die Expert Base erstellt und parst.
+├── build_expert_base.py       # Dieses Skript baut die Expert Base.
+└── extend_expert_base.py      # Dieses Skript erweitert die Expert Base.
 ```
 
 ## Installation
@@ -35,14 +36,16 @@ poetry install
 
 ## Nutzung
 
-Die Hauptprozedur, um die Expert Base zu bauen, befindet sich im Skript `run.py`
+Die zwei ausführbaren Skipte, welche die Expert Base bauen und erweitern, befindet sich in den Skripten `build_expert_base.py` und `extend_expert_base.py`
 
 ```python
 def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
     try:
         logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
 
-        expert_base = ExpertBase(csv_file)
+        expert_base = ExpertBase("data/orcids.csv", from_csv=True)
+
+        expert_base.serialize_expert_base("saved_base/expert_base.json")
 
         # Für jeden Experten eine QMD-Datei erstellen
         for e in expert_base.get_expert_as_list():
@@ -57,7 +60,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
 
 if __name__ == "__main__":
 
-    csv_file = "orcids.csv"
+    csv_file = "data/orcids.csv"
     output_qmd = "outputs/expert_qmd"
     output_yml = "expert_base.yml"
 
