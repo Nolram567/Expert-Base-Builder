@@ -5,7 +5,7 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
-class ExpertBase():
+class ExpertBase:
     """
     Objekte dieser Klasse repräsentieren die Expert Base als Bündel von Experten
 
@@ -119,7 +119,8 @@ class ExpertBase():
                                         "Nachname": expert.get("Nachname", ""),
                                         "Derzeitige Beschäftigung": expert.get("Derzeitige Beschäftigung", []),
                                         "Forschungsinteressen": expert.get("Forschungsinteressen", []),
-                                        "Veröffentlichungen": expert.get("Veröffentlichungen", [])
+                                        "Veröffentlichungen": expert.get("Veröffentlichungen", []),
+                                        "E-Mail": expert.get("E-Mail", "")
                                     })
 
                 self.base[orcid] = new_expert
@@ -127,6 +128,7 @@ class ExpertBase():
             logger.info(f"Das Expert Base Objekt wurde erfolgreich von {path} eingelesen.")
 
             return 0
+
         except IOError as e:
 
             logger.error(f"Fehler beim Deserialisieren der Expert Base von {path}:\n{e}")
@@ -195,12 +197,13 @@ class ExpertBase():
         """
         print(json.dumps(self.raw_base, indent=4, ensure_ascii=False))
 
-    def parse_yml(self, path: str) -> None:
+    def parse_yml(self, path: str, url: str = "www.hermes-hub.de") -> None:
         """
         Diese Methode parst ein ExpertBase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
             path: Der Dateipfad und der Name der Ausgabedatei.
+            url: Die Basis-URL, die für die Formatierung der Endpunkte genutzt wird.
         """
 
         logger.info(f"Das Expert-Base-Objekt wird zu einer YAML-Datei geparst.")
@@ -211,8 +214,8 @@ class ExpertBase():
 
             name = expert.get_name(formated=False)
             research_interest = expert.get_research_interest(formated=True)
-            linked_name = f'<a href="www.hermes-hub.de/vernetzen/experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html">{expert.get_name(formated=True)}</a>'
-            organisation = ", ". join(expert.get_organisation())
+            linked_name = f'<a href="{url}/vernetzen/experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html">{expert.get_name(formated=True)}</a>'
+            organisation = ",<br>". join(set(expert.get_organisation()))
             mail = expert.get_mail()
 
             listing_entry = {
@@ -220,7 +223,7 @@ class ExpertBase():
                 "Organisation": organisation,
                 "ORCID-Keywords": research_interest,
                 "TaDiRAH-Zuordnung": "",
-                "Kontaktweg": mail
+                "Kontaktweg": f'<a href="mailto:{mail}">{mail}</a>'
                 }
 
             entries.append(listing_entry)

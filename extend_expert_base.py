@@ -16,21 +16,22 @@ console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
 
 
-def main(base_path: str, properties: str) -> None:
+def main(input_path: str, output_path:str, properties: str) -> None:
     try:
         logger.info(f"Starte die Erweiterung der Expert Base mit der Datei: {properties}")
 
-        expert_base = ExpertBase(base_path, from_csv=False)
+        expert_base = ExpertBase(input_path, from_csv=False)
 
         expert_base.add_properties_from_csv(properties)
 
-        expert_base.serialize_expert_base("saved_base/expert_base.json")
+        expert_base.serialize_expert_base("output_path")
 
     except Exception as e:
-        logger.error(f"Ein Fehler ist aufgetreten: {e}", exc_info=True)
+        logger.error(f"Ein unerwarteter Fehler ist aufgetreten: {e}", exc_info=True)
 
 
 if __name__ == "__main__":
 
-    main("saved_base/expert_base.json",
-         "data/property_extension.csv")
+    main(input_path="saved_base/expert_base.json",
+         output_path="saved_base/expert_base.json",
+         properties="data/property_extension.csv")
