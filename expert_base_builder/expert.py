@@ -93,9 +93,11 @@ class Expert:
                 if i == n:
                     break
                 if i == 0:
-                    current_employment_string = f"* {triple_to_nl_sentence(current_employment[i])}"
+                    current_employment_string = (f"* {current_employment[i][0] if current_employment[i][0] else ''}"
+                                                 f" ({current_employment[i][2] if current_employment[i][2] else ''})")
                 else:
-                    current_employment_string += f"\n* {triple_to_nl_sentence(current_employment[i])}"
+                    current_employment_string += (f"\n* {current_employment[i][0] if current_employment[i][0] else ''}"
+                                                  f" ({current_employment[i][2] if current_employment[i][2] else ''})")
 
             return current_employment_string
 
@@ -137,7 +139,7 @@ class Expert:
         else:
             return self.properties.get("Forschungsinteressen", [])
 
-    def extend_properties(self, property, value) -> None:
+    def extend_properties(self, property: str, value) -> None:
         """
         Die Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
 
@@ -147,12 +149,12 @@ class Expert:
         """
         self.properties[property] = value
 
-    def parse_qmd(self, path) -> None:
+    def parse_qmd(self, path: str) -> None:
         """
         Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
         Args:
-            output_path: Der relative Pfad des qmd-Dokuments
+            path: Der relative Pfad des qmd-Dokuments
         """
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
@@ -182,41 +184,6 @@ class Expert:
         logger.info(
             f"Das qmd-Dokument für {self.get_name()} wurde erstellt und unter {output_path} gespeichert..."
         )
-
-    def doi_resolver(self) -> str:
-        """
-        Diese Helfermethode löst alle DOI's des Objekts zu einer Literaturangabe nach MLA auf.
-        Die DOI's sollten unter self.properties['Veröffentlichung'] als Liste vorliegen.
-
-        Returns:
-            Alle aufgelösten Objekte als String zeilenweise nach MLA formatiert.
-        """
-
-        formated_publications = ""
-
-        for doi in self.get_properties().get("Veröffentlichungen", []):
-
-            logger.info(f"{doi} wird aufgelöst...")
-
-            headers = {"Accept": "text/x-bibliography; style=mla"}
-
-            response = requests.get(f"https://doi.org/{doi}", headers=headers)
-
-            if response.status_code == 200:
-
-                response.encoding = "utf-8"
-
-                decoded_text = html.unescape(response.text)
-
-                decoded_text = BeautifulSoup(decoded_text, "html.parser").get_text()
-
-                formated_publications = f"{formated_publications}\n{decoded_text}"
-            else:
-                logger.error(
-                    f"{doi} konnte nicht aufgelöst werden. Status-Code: {response.status_code}"
-                )
-
-        return formated_publications
 
     def set_semantic_properties(self):
         pass
