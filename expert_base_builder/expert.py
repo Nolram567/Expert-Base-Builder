@@ -228,6 +228,5 @@ class Expert:
 
         return "".join(builder)
 
-
     def set_semantic_properties(self):
         pass
