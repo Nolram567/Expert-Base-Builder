@@ -116,7 +116,6 @@ def extract_keywords(orcid_data: dict) -> List[str]:
 
     for k in orcid_data["keywords"]["keyword"]:
         keywords.append(k["content"])
-
     return keywords
 
 def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
@@ -154,7 +153,6 @@ def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
             pass
 
     return dois
-
 
 def main(input_csv: str, output_json: str) -> None:
     """
