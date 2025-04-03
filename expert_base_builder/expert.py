@@ -135,7 +135,12 @@ class Expert:
         """
 
         if formated:
-            return ", ".join(self.properties.get("Forschungsinteressen", []))
+            orcid_keywords = self.properties.get("Forschungsinteressen", [])
+
+            if len(orcid_keywords) == 1 and "," in orcid_keywords[0]:
+                orcid_keywords = [k.strip() for k in orcid_keywords[0].split(",")]
+
+            return ";".join(orcid_keywords)
         else:
             return self.properties.get("Forschungsinteressen", [])
 
