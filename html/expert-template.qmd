@@ -15,5 +15,36 @@ anchor-sections: false
 {{ current-employment }}
 
 ## ORCID-Keywords
+<style>.tag {
+  display: inline-block;
+  background-color: #eeebe6;
+  color: #423d4d;
+  padding: .25em .75em;
+  margin: 0.15em;
+  font-size: .75em;
+  text-transform: uppercase;
+  border: solid 0px;
+  border-color: white;
+  border-radius: .25rem;
+}</style>
+
+{{{ keywords }}}
+
+## Digitale Forschungsaktivitäten
+
+<style>.tag_tadirah {
+    display: inline-block;
+    background-color: #66dadd;
+    color: #423d4d;
+    padding: .25em .75em;
+    margin: 0.15em;
+    font-size: .75em;
+    text-transform: uppercase;
+    border:solid 0px;
+    border-color: white;
+    border-radius:.25rem;
+}</style>
+
+{{{ tadirah }}}
 
 {{ keywords }}
