@@ -182,12 +182,17 @@ class ExpertBase:
                 current_expert = self.base[current_orcid]
                 for i, property in enumerate(properties[2:], 1):
 
-                    current_expert.extend_properties(property, row[1+i])
+                    new_properties = ""
+                    if "," in row[1+i]:
+                        new_properties = row[1+i].split(",")
+                        new_properties = [p.strip() for p in new_properties]
 
-                    self.raw_base[current_orcid][property] = row[1+i]
+                    current_expert.extend_properties(property, new_properties)
+
+                    self.raw_base[current_orcid][property] = new_properties
 
                     logger.info(f"Für den Experten {current_orcid} wurde die Eigenschaft '{property}'"
-                                f" mit dem Wert '{row[1+i]}' angelegt oder überschrieben.")
+                                f" mit dem Wert '{new_properties}' angelegt oder überschrieben.")
             else:
                 logger.warning(f"Der Experte {current_orcid} ist noch nicht Teil der Expert Base.")
 
