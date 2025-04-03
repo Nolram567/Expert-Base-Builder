@@ -5,7 +5,7 @@ import logging
 
 __all__ = ["Expert", "ExpertBase", "triple_to_nl_sentence"]
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
