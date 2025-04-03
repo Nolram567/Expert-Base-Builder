@@ -44,7 +44,7 @@ class Expert:
         """
         Diese Methode gibt die Eigenschaften des Expertenobjekts zurück.
         """
-        return self.properties
+        return self.properties.copy()
 
     def get_orcid(self) -> str:
         """
