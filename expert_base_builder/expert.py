@@ -139,6 +139,14 @@ class Expert:
         else:
             return self.properties.get("Forschungsinteressen", [])
 
+    def get_tadirah(self, formated=True) -> list[str] or str:
+
+        if formated:
+            tadirah = self.properties.get("TaDiRAH-Zuordnung", [])
+            return ";".join(tadirah)
+        else:
+            return self.properties.get("TaDiRAH-Zuordnung", "")
+
     def extend_properties(self, property: str, value) -> None:
         """
         Die Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
@@ -162,13 +170,19 @@ class Expert:
         with open("html/expert-template.qmd", "r", encoding="utf-8") as qmd_template:
             template = qmd_template.read()
 
+        formated_research_interest = Expert.__format_qmd_keywords(self.get_research_interest(formated=False))
+        formated_tadirah = Expert.__format_tadirah_keywords(self.get_tadirah(formated=False))
+
+
         formated_template = chevron.render(
             template,
             {
                 "expert-name": self.get_name(),
                 "orcid-domain": f"https://orcid.org/{self.get_orcid()}",
                 "current-employment": self.get_current_employment(n=3),
-                "keywords": self.get_research_interest(),
+                "keywords": formated_research_interest,
+                "tadirah": formated_tadirah,
+                "e-mail": self.get_mail()
             },
         )
 
@@ -184,6 +198,31 @@ class Expert:
         logger.info(
             f"Das qmd-Dokument für {self.get_name()} wurde erstellt und unter {output_path} gespeichert..."
         )
+
+    @staticmethod
+    def __format_qmd_keywords(keywords: List[str]) -> str:
+
+        if len(keywords) == 1 and "," in keywords[0]:
+            keywords = [k.strip() for k in keywords[0].split(",")]
+
+        builder = ['<div class="orcid-keywords">']
+        builder.extend(f'<span class="tag">{word}</span>' for word in keywords)
+        builder.append("</div>")
+
+        return "".join(builder)
+
+    @staticmethod
+    def __format_tadirah_keywords(keywords: List[str]) -> str:
+
+        if len(keywords) == 1 and "," in keywords[0]:
+            keywords = [k.strip() for k in keywords[0].split(",")]
+
+        builder = ['<div class="tadirah-keywords">']
+        builder.extend(f'<span class="tag_tadirah">{word}</span>' for word in keywords)
+        builder.append("</div>")
+
+        return "".join(builder)
+
 
     def set_semantic_properties(self):
         pass
