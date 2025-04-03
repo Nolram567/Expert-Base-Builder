@@ -9,8 +9,7 @@ format:
 mainfont: IBM Plex Sans
 anchor-sections: false
 ---
-
-## Derzeitige Beschäftigung
+<h1><p><a href="{{ orcid-domain }}">{{ expert-name }}<img src="orcid.png" alt="orcid" width="32" height="32"></a></p></h1>
 
 {{ current-employment }}
 
@@ -47,4 +46,6 @@ anchor-sections: false
 
 {{{ tadirah }}}
 
-{{ keywords }}
+## Kontakt
+
+<a href="mailto:{{ e-mail }}">{{ e-mail }}</a>
