@@ -150,8 +150,8 @@ class ExpertBase:
         Mit dieser Datei können die Eigenschaften der Experten in der Expert Base erweitert oder überschrieben werden.
         Die Eigenschaften werden in einer CSV-Datei nach dem folgenden Muster definiert:
 
-        |name|orcid|neue_eigenschaft|neue_eigenschaft_2|(...)\n
-        |(..)|(...)|(..............)|(................)|(...)\n
+        | name | orcid | neue_eigenschaft | neue_eigenschaft_2|(...)\n
+        | (...) | (...) | keyword or keyword1, keyword2, (...)|(...)|(...)\n
         (...)
 
         Args:
