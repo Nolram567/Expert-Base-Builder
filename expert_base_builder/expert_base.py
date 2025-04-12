@@ -221,7 +221,7 @@ class ExpertBase:
             research_interest = expert.get_research_interest(formated=True)
             personal_page = f"{url}/vernetzen/expert-base/experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html"
             linked_name = f'<a href={personal_page}>{expert.get_name(formated=True)}</a>'
-            organisation = ",<br>". join(set(expert.get_organisation()))
+            organisation = ",<br>".join(expert.get_organisation())
             mail = expert.get_mail()
 
             listing_entry = {
