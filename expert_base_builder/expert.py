@@ -144,7 +144,15 @@ class Expert:
             if employment[2] not in organisations:
                 organisations.append(employment[2])
 
-        return organisations
+        qids = {}
+
+        for organisation in organisations:
+            qid = search_wikidata_id(organisation)
+
+            if qid not in qids.keys():
+                qids[qid] = organisation
+
+        return list(qids.values())
 
     def get_research_interest(self, formated=True) -> List[str] or str:
         """
