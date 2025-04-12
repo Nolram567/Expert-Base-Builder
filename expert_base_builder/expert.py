@@ -11,6 +11,30 @@ from .llm_transformer import triple_to_nl_sentence
 logger = logging.getLogger(__name__)
 
 
+def search_wikidata_id(search_string: str) -> str:
+    """
+    Diese Funktion sucht die Wikidata-qid für eine Entität
+
+    Args:
+        search_string: Die Entität, nach der gesucht wird.
+    Returns:
+        Die QID oder der Suchstring, wenn kein Eintrag gefunden wird.
+    """
+    params = {
+        "action": "wbsearchentities",
+        "language": "de",
+        "format": "json",
+        "search": search_string
+    }
+    response = requests.get("https://www.wikidata.org/w/api.php", params=params)
+    data = response.json()
+
+    if data['search']:
+        return data['search'][0]['id']
+    else:
+        logger.warning("Die Eingabe wurde nicht in wikidata gefunden. Gebe Eingabe zurück...")
+        return search_string
+
 class Expert:
     """
     Objekte dieser Klasse repräsentieren einen Experten der HERMES-Expert-Base.
