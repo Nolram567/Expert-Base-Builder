@@ -72,12 +72,10 @@ class Expert:
         self, n, formated=True
     ) -> str or list[tuple[str, str, str]]:
         """
-        Diese Methode gibt die derzeitige Beschäftigung zurück. Entweder als Liste von Tripeln oder als String, der das
-        oder die Arbeitsverhältnisse in natürlicher Sprache beschreibt.
-        Die Methode greift auf das Modul llm_transformer zurück, um aus strukturierten Daten natürliche Sprache zu generieren.
+        Diese Methode gibt die derzeitige Beschäftigung als Liste von Tripeln zurück.
 
         Args:
-            formated: Spezifiert, ob die Rückgabe in natürlicher Sprache formatiert sein soll.
+            formated: Spezifiert, ob die Rückgabe formatiert sein soll.
             n: Spezifiziert, wie viele Beschäftigungsverhältnisse maximal aufgenommen werden sollen.
 
         Returns:
@@ -87,19 +85,17 @@ class Expert:
 
         if formated:
 
-            current_employment_string = ""
+            lines = []
 
-            for i in range(len(current_employment)):
+            for i, entry in enumerate(current_employment):
                 if i == n:
                     break
-                if i == 0:
-                    current_employment_string = (f"* {current_employment[i][0] if current_employment[i][0] else ''}"
-                                                 f" ({current_employment[i][2] if current_employment[i][2] else ''})")
-                else:
-                    current_employment_string += (f"\n* {current_employment[i][0] if current_employment[i][0] else ''}"
-                                                  f" ({current_employment[i][2] if current_employment[i][2] else ''})")
 
-            return current_employment_string
+                parts = [part for part in entry if part]
+                line = "* " + ", ".join(parts)
+                lines.append(line)
+
+            return "\n".join(lines)
 
         else:
             return self.properties.get("Derzeitige Beschäftigung", [])[:n]
