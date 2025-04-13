@@ -6,8 +6,6 @@ import html
 from bs4 import BeautifulSoup
 import logging
 
-from .llm_transformer import triple_to_nl_sentence
-
 logger = logging.getLogger(__name__)
 
 
