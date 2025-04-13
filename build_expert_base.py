@@ -21,6 +21,8 @@ def main(csv_file: str, output_qmd: str, output_yml: str, base_url: str) -> None
 
         expert_base = ExpertBase(csv_file, from_csv=True)
 
+        expert_base.add_properties_from_csv("data/property_extension.csv")
+
         expert_base.serialize_expert_base("saved_base/backup.json") # Serialisiere die Expert Base als JSON für die Begutachtung.
 
         # Für jeden Experten eine QMD-Datei erstellen
