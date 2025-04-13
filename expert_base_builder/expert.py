@@ -52,6 +52,13 @@ class Expert:
         (...)
     }
     """
+    DUMMY_TOOLTIP = ("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
+                     "labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo "
+                     "dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+                     "amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor "
+                     "invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+                     " justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")
+
 
     def __init__(self, orcid: str, data: dict):
         """
@@ -245,13 +252,25 @@ class Expert:
         return "".join(builder)
 
     @staticmethod
-    def __format_tadirah_keywords(keywords: List[str]) -> str:
+    def __format_tooltip(keyword: str, tip: str) -> str:
+        return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
+    @staticmethod
+    def __format_tadirah_keywords(keywords: List[str], tooltip: str = DUMMY_TOOLTIP) -> str:
+        """
+        Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte des Experten.
+
+        Args:
+            keywords: Die tadirah-Schlagworte als Liste von Strings.
+            tooltip: Der
+        Returns:
+            Das formatierte div-Element
+        """
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
         builder = ['<div class="tadirah-keywords">']
-        builder.extend(f'<span class="tag_tadirah">{word}</span>' for word in keywords)
+        builder.extend(f'<span class="tag_tadirah">{Expert.__format_tooltip(word, tooltip)}</span>' for word in keywords)
         builder.append("</div>")
 
         return "".join(builder)
