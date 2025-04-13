@@ -188,11 +188,3 @@ def main(input_csv: str, output_json: str) -> None:
                                 "family-name": extracted_name["family-name"],
                                 "employments": extracted_employment
                                 })
-
-
-
-if __name__ == "__main__":
-
-    input_csv_path = "../data/orcids.csv"
-    output_json_path = "../aggregated_orcid_data.json"
-    main(input_csv_path, output_json_path)
