@@ -173,6 +173,8 @@ class Expert:
             if len(orcid_keywords) == 1 and "," in orcid_keywords[0]:
                 orcid_keywords = [k.strip() for k in orcid_keywords[0].split(",")]
 
+            orcid_keywords = [k.title() for k in orcid_keywords]
+
             return ";".join(orcid_keywords)
         else:
             return self.properties.get("Forschungsinteressen", [])
