@@ -226,6 +226,7 @@ class ExpertBase:
 
             listing_entry = {
                 "Name": linked_name,
+                "Sortierschlüssel": expert.get_properties().get("Nachname", ""),
                 "Organisation": organisation,
                 "ORCID-Keywords": research_interest,
                 "TaDiRAH-Zuordnung": expert.get_tadirah(formated=True),
