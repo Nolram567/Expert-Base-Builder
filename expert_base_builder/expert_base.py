@@ -230,8 +230,6 @@ class ExpertBase:
                 "Organisation": organisation,
                 "ORCID-Keywords": research_interest,
                 "TaDiRAH-Zuordnung": expert.get_tadirah(formated=True),
-                "Kontaktweg": f'<a href="mailto:{mail}">{mail}</a>',
-                "Personenseite": f"{personal_page}"
                 }
 
             entries.append(listing_entry)
