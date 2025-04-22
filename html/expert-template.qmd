@@ -1,5 +1,6 @@
 ---
 title: Expertbase
+subtitle: "Austausch mit und für Expert*innen"
 title-block-banner: ../../../assets/img/banner/Banner_hellblau.png
 
 format:
@@ -94,4 +95,4 @@ abbr[data-tooltip]:hover::after {
 E-Mail: <a href="mailto:{{ e-mail }}">{{ e-mail }}</a>
 
 <br>
-[Zurück zur Expertbase](/vernetzen/expert-base/expert-base.qmd){.btn .btn-outline-primary .btn role="button" data-toggle="tooltip" title="Expertbase"}
+[Zurück zur Expertbase](/vernetzen/expertbase/expert-base.html){.btn .btn-outline-primary .btn role="button" data-toggle="tooltip" title="Expertbase"}
