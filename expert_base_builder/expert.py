@@ -50,6 +50,7 @@ class Expert:
         (...)
     }
     """
+
     DUMMY_TOOLTIP = ("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
                      "labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo "
                      "dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
@@ -202,7 +203,7 @@ class Expert:
         Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
         Args:
-            path: Der relative Pfad des qmd-Dokuments
+            path: Der relative Pfad zu dem Ordner für die Ausgabe des qmd-Dokuments.
         """
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
@@ -210,9 +211,8 @@ class Expert:
         with open("html/expert-template.qmd", "r", encoding="utf-8") as qmd_template:
             template = qmd_template.read()
 
-        formated_research_interest = Expert.__format_qmd_keywords(self.get_research_interest(formated=False))
+        formated_research_interest = Expert.__format_orcid_keywords(self.get_research_interest(formated=False))
         formated_tadirah = Expert.__format_tadirah_keywords(self.get_tadirah(formated=False))
-
 
         formated_template = chevron.render(
             template,
@@ -240,8 +240,15 @@ class Expert:
         )
 
     @staticmethod
-    def __format_qmd_keywords(keywords: List[str]) -> str:
+    def __format_orcid_keywords(keywords: List[str]) -> str:
+        """
+        Die Helfermethode baut und formatiert das div-Element für die ORCID-Schlagworte auf der Personenseite.
 
+        Args:
+            keywords: Die Keywords als Liste
+        Returns:
+            Die ORCID Keywords als HTML Markup für die Personenseite.
+        """
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
@@ -253,18 +260,21 @@ class Expert:
 
     @staticmethod
     def __format_tooltip(keyword: str, tip: str) -> str:
+        """
+        Baut das abbr-Element für die tadirah-Schlagworte auf der Personenseite.
+        """
         return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
     @staticmethod
     def __format_tadirah_keywords(keywords: List[str], tooltip: str = DUMMY_TOOLTIP) -> str:
         """
-        Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte des Experten.
+        Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte auf der Personenseite.
 
         Args:
             keywords: Die tadirah-Schlagworte als Liste von Strings.
             tooltip: Der
         Returns:
-            Das formatierte div-Element
+            Die tadirah Keywords als HTML Markup für die Personenseite
         """
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
