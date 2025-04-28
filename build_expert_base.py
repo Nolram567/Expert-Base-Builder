@@ -41,6 +41,6 @@ if __name__ == "__main__":
     main(
         csv_file="data/orcids.csv",
         output_qmd = "outputs/expert_qmd",
-        output_yml = "outputs/expert_base.yml",
+        output_yml = "outputs/expertbase.yml",
         base_url = "https://hermes-hub-development-repo-e9c5dc.pages.uni-marburg.de"
     )
