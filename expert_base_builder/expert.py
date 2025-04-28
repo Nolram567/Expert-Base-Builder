@@ -5,6 +5,7 @@ import requests
 import html
 from bs4 import BeautifulSoup
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -266,21 +267,23 @@ class Expert:
         return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
     @staticmethod
-    def __format_tadirah_keywords(keywords: List[str], tooltip: str = DUMMY_TOOLTIP) -> str:
+    def __format_tadirah_keywords(keywords: List[str]) -> str:
         """
         Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte auf der Personenseite.
 
         Args:
             keywords: Die tadirah-Schlagworte als Liste von Strings.
-            tooltip: Der
         Returns:
             Die tadirah Keywords als HTML Markup für die Personenseite
         """
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
+        with open('data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
+            tooltips = json.load(file)
+
         builder = ['<div class="tadirah-keywords">']
-        builder.extend(f'<span class="tag_tadirah">{Expert.__format_tooltip(word, tooltip)}</span>' for word in keywords)
+        builder.extend(f'<span class="tag_tadirah">{Expert.__format_tooltip(word, tooltips.get(word, ""))}</span>' for word in keywords)
         builder.append("</div>")
 
         return "".join(builder)
