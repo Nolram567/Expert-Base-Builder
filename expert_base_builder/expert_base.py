@@ -14,9 +14,6 @@ class ExpertBase:
     {orcid: Objekt der Klasse Experte,
     (...)
     }
-
-    Die Klassenvariable "PATH" enthält den Pfad zu dem Verzeichnis, in dem die Quell-CSV-Datei oder serialisierte Objekte liegen.
-    Die Klassenvariable PROPERTIES enthält alle zulässigen Eigenschaften.
     """
 
     def __init__(self, filename: str, from_csv: bool = True):
@@ -100,12 +97,12 @@ class ExpertBase:
         """
         return list(self.base.keys())
 
-    def deserialize_expert_base(self, path: str) -> None or int:
+    def deserialize_expert_base(self, path: str) -> None:
         """
         Die Methode deserialisiert ein Expert Base Objekt.
 
         Args:
-            path: Der Dateipfad, unter dem das Expert Base Objekt abgespeichert werden kann.
+            path: Der Dateipfad, unter dem das Expert Base Objekt abgespeichert werden soll.
         """
         try:
             with open(path, "r", encoding='utf-8') as f:
@@ -127,11 +124,9 @@ class ExpertBase:
 
             logger.info(f"Das Expert Base Objekt wurde erfolgreich von {path} eingelesen.")
 
-            return 0
-
         except IOError as e:
 
-            logger.error(f"Fehler beim Deserialisieren der Expert Base von {path}:\n{e}")
+            logger.error(f"Fehler beim Deserialisieren der Expert Base unter {path}:\n{e}")
 
     def serialize_expert_base(self, path: str) -> None:
         """
