@@ -1,5 +1,4 @@
 import csv
-import json
 import requests
 import logging
 from typing import List, Dict
@@ -153,38 +152,3 @@ def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
             pass
 
     return dois
-
-def main(input_csv: str, output_json: str) -> None:
-    """
-    Main-Funktion für Entwicklungszwecke: CSV einlesen, ORCID-Daten abfragen und als JSON speichern.
-
-    Args:
-        input_csv: Pfad zur Eingabedatei (CSV mit ORCID-Bezeichnern).
-        output_json: Pfad zur Ausgabedatei (JSON-Datei mit aggregierten Daten).
-    """
-    orcids = read_orcids_from_csv(input_csv)
-    aggregated_data = []
-
-    for orcid in orcids:
-        print(f"Abfrage von ORCID {orcid}...")
-        person_endpoint_data = fetch_orcid_data(orcid, endpoint="person")
-        activities_endpoint_data = fetch_orcid_data(orcid, endpoint="activities")
-
-        '''with open("../person_response.json", "w", encoding='utf-8') as jsonfile:
-            json.dump(person_endpoint_data, jsonfile, ensure_ascii=False, indent=4)'''
-
-        print(extract_mail(person_endpoint_data))
-
-        if person_endpoint_data is None:
-            print(f"Fehler beim Abrufen von Daten für ORCID {orcid}")
-            aggregated_data.append({"orcid": orcid, "error": "Daten konnten nicht abgerufn werden"})
-            continue
-
-        extracted_name = extraxt_names(person_endpoint_data)
-        extracted_employment = extract_current_employments(activities_endpoint_data)
-
-        aggregated_data.append({"orcid": orcid,
-                                "given-names": extracted_name["given-names"],
-                                "family-name": extracted_name["family-name"],
-                                "employments": extracted_employment
-                                })
