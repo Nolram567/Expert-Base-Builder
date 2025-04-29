@@ -83,7 +83,7 @@ class ExpertBase:
         """
         Gibt die Objektvariable base zurück.
         """
-        return self.base
+        return self.base.copy()
 
     def get_expert_as_list(self) -> List[Expert]:
         """
