@@ -2,6 +2,7 @@ from .orcid_aggregator import *
 from expert_base_builder.expert import Expert
 import logging
 import yaml
+import json
 
 logger = logging.getLogger(__name__)
 
