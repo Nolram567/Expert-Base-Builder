@@ -2,8 +2,6 @@ import os
 from typing import List
 import chevron
 import requests
-import html
-from bs4 import BeautifulSoup
 import logging
 import json
 
