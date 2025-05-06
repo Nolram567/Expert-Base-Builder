@@ -1,9 +1,8 @@
 from .expert import Expert
 from .expert_base import ExpertBase
-from .llm_transformer import triple_to_nl_sentence
 import logging
 
-__all__ = ["Expert", "ExpertBase", "triple_to_nl_sentence"]
+__all__ = ["Expert", "ExpertBase"]
 
 __version__ = "0.4.0"
 
