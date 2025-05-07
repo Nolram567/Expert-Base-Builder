@@ -269,7 +269,7 @@ class Expert:
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
-        with open('data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
+        with open('Expert-Base-Builder/data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
             tooltips = json.load(file)
 
         builder = ['<div class="tadirah-keywords">']
