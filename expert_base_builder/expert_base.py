@@ -1,3 +1,5 @@
+import os
+
 from .orcid_aggregator import *
 from expert_base_builder.expert import Expert
 import logging
@@ -229,6 +231,8 @@ class ExpertBase:
                 }
 
             entries.append(listing_entry)
+
+        os.makedirs(path, exist_ok=True)
 
         with open(path, "w", encoding="utf-8") as f:
             yaml.dump(entries, f, allow_unicode=True, default_flow_style=False, sort_keys=False)

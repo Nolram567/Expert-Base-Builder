@@ -223,6 +223,8 @@ class Expert:
                             f"{self.get_name(formated=False)[1].lower().strip().replace(" ", "-")}"
                             f".qmd")
 
+        os.makedirs(output_path, exist_ok=True)
+
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(formated_template)
 
