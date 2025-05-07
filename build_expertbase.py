@@ -41,6 +41,6 @@ if __name__ == "__main__":
     main(
         csv_file="Expert-Base-Builder/data/orcids.csv",
         output_qmd = "Expert-Base-Builder/outputs/experts",
-        output_yml = "Expert-Base-Builder/outputs/expertbase.yml",
+        output_yml = "Expert-Base-Builder/outputs/",
         base_url = "https://hermes-hub-development-repo-e9c5dc.pages.uni-marburg.de"
     )

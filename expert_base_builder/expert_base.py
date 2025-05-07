@@ -234,7 +234,7 @@ class ExpertBase:
 
         os.makedirs(path, exist_ok=True)
 
-        with open(path, "w", encoding="utf-8") as f:
+        with open(os.path.join(path, "expertbase.yml"), "w", encoding="utf-8") as f:
             yaml.dump(entries, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
         logger.info(f"Das Expert-Base-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
