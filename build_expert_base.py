@@ -15,7 +15,7 @@ console_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s
 console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
 
-def main(csv_file: str, output_qmd: str, output_yml: str, base_url: str) -> None:
+def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
     try:
         logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
 
@@ -30,7 +30,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str, base_url: str) -> None
             e.parse_qmd(output_qmd)
 
         # Expert Base als YAML-Datei speichern
-        expert_base.parse_yml(output_yml, url=base_url)
+        expert_base.parse_yml(output_yml)
 
     except Exception as e:
         logger.error(f"Ein unerwarteter Fehler ist aufgetreten: {e}", exc_info=True)
@@ -42,5 +42,4 @@ if __name__ == "__main__":
         csv_file="data/orcids.csv",
         output_qmd = "outputs/expert_qmd",
         output_yml = "outputs/expertbase.yml",
-        base_url = "https://hermes-hub-development-repo-e9c5dc.pages.uni-marburg.de"
     )
