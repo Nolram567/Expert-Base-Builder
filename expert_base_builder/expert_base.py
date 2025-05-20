@@ -200,13 +200,12 @@ class ExpertBase:
         """
         print(json.dumps(self.raw_base, indent=4, ensure_ascii=False))
 
-    def parse_yml(self, path: str, url: str = "www.hermes-hub.de") -> None:
+    def parse_yml(self, path: str) -> None:
         """
         Diese Methode parst ein ExpertBase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
             path: Der Dateipfad und der Name der Ausgabedatei.
-            url: Die Basis-URL, die für die Formatierung der Endpunkte genutzt wird.
         """
 
         logger.info(f"Das Expert-Base-Objekt wird zu einer YAML-Datei geparst.")
@@ -217,7 +216,7 @@ class ExpertBase:
 
             name = expert.get_name(formated=False)
             research_interest = expert.get_research_interest(formated=True)
-            personal_page = f"{url}/vernetzen/expertbase/experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html"
+            personal_page = f"experts/{name[0].lower().strip().replace(" ", "-")}-{name[1].lower().strip().replace(" ", "-")}.html"
             linked_name = f'<a href={personal_page}>{expert.get_name(formated=True)}</a>'
             organisation = ",<br>".join(expert.get_organisation())
 
