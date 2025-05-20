@@ -11,7 +11,7 @@ mainfont: IBM Plex Sans
 anchor-sections: false
 sidebar: expertbase_sidebar
 ---
-<h1><p><a href="{{ orcid-domain }}" target="_blank">{{ expert-name }}<img src="orcid.png" alt="orcid" width="32" height="32"></a></p></h1>
+<h1><p><a href="{{ orcid-domain }}" target="_blank">{{ expert-name }}<img src="../../../assets/img/orcid.png" alt="orcid" width="32" height="32"></a></p></h1>
 
 {{ current-employment }}
 

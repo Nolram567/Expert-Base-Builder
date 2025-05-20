@@ -199,7 +199,7 @@ class Expert:
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
 
-        with open("html/expert-template.qmd", "r", encoding="utf-8") as qmd_template:
+        with open("Expert-Base-Builder/html/expert-template.qmd", "r", encoding="utf-8") as qmd_template:
             template = qmd_template.read()
 
         formated_research_interest = Expert.__format_orcid_keywords(self.get_research_interest(formated=False))
@@ -222,6 +222,8 @@ class Expert:
                             f"-"
                             f"{self.get_name(formated=False)[1].lower().strip().replace(" ", "-")}"
                             f".qmd")
+
+        os.makedirs(path, exist_ok=True)
 
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(formated_template)
@@ -269,7 +271,7 @@ class Expert:
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
-        with open('data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
+        with open('Expert-Base-Builder/data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
             tooltips = json.load(file)
 
         builder = ['<div class="tadirah-keywords">']
