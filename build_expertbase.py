@@ -21,7 +21,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
 
         expert_base = ExpertBase(csv_file, from_csv=True)
 
-        expert_base.add_properties_from_csv("data/property_extension.csv")
+        expert_base.add_properties_from_csv("Expert-Base-Builder/data/property_extension.csv")
 
         expert_base.serialize_expert_base("saved_base/backup.json") # Serialisiere die Expert Base als JSON für die Begutachtung.
 
@@ -39,7 +39,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
 if __name__ == "__main__":
 
     main(
-        csv_file="data/orcids.csv",
-        output_qmd = "outputs/expert_qmd",
-        output_yml = "outputs/expertbase.yml"
+        csv_file="Expert-Base-Builder/data/orcids.csv",
+        output_qmd = "Expert-Base-Builder/outputs/experts",
+        output_yml = "Expert-Base-Builder/outputs/",
     )
