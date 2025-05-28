@@ -131,14 +131,17 @@ class ExpertBase:
 
             logger.error(f"Fehler beim Deserialisieren der Expert Base unter {path}:\n{e}")
 
-    def serialize_expert_base(self, path: str) -> None:
+    def serialize_expert_base(self, path: str, name: str) -> None:
         """
         Diese Methode serialisiert das Expert Base Objekt als JSON-Datei.
 
         Args:
             path: Der Dateipfad, unter dem das Expert Base Objekt serialisiert werden soll.
         """
-        with open(path, "w", encoding='utf-8') as f:
+
+        os.makedirs(path, exist_ok=True)
+
+        with open(os.path.join(path, name), "w", encoding='utf-8') as f:
             json.dump(self.raw_base, f, indent=4, ensure_ascii=False)
 
         logger.info(f"Das Expert Base Objekt wurde erfolgreich unter {path} serialisiert.")
