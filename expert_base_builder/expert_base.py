@@ -117,7 +117,6 @@ class ExpertBase:
                                         "Nachname": expert.get("Nachname", ""),
                                         "Derzeitige Beschäftigung": expert.get("Derzeitige Beschäftigung", []),
                                         "Forschungsinteressen": expert.get("Forschungsinteressen", []),
-                                        "Veröffentlichungen": expert.get("Veröffentlichungen", []),
                                         "E-Mail": expert.get("E-Mail", "")
                                     })
 
