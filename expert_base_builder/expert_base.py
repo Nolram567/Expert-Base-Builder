@@ -169,57 +169,6 @@ class ExpertBase:
 
         logger.info(f"Das Expert Base Objekt wurde erfolgreich unter {path} serialisiert.")
 
-    def add_properties_from_csv(self, path: str) -> None:
-        """
-        Mit dieser Datei können die Eigenschaften der Experten in der Expert Base erweitert oder überschrieben werden.
-        Die Eigenschaften werden in einer CSV-Datei nach dem folgenden Muster definiert:
-
-        | name | orcid | neue_eigenschaft | neue_eigenschaft_2|(...)\n
-        | (...) | (...) | keyword or keyword1, keyword2, (...)|(...)|(...)\n
-        (...)
-
-        Args:
-             path: Der Dateipfad zu der CSV-Datei.
-        """
-        try:
-            csv_file = open(path, newline='', encoding='utf-8')
-            reader = csv.reader(csv_file)
-            properties = next(reader)
-            orcids = self.get_orcids_as_list()
-        except IOError as e:
-            logger.error(f"Die Datei {path} konnte nicht geöffnet werden:\n {e}")
-            return
-
-        if len(properties) < 2:
-            logger.warning(f"Die CSV-Datei ist ungültig. Es muss mindestens 3 Spalten geben. Abbruch...")
-            return
-        elif not properties[1].lower() == "orcid":
-            logger.warning(f"Die CSV-Datei ist ungültig. In der zweiten Spalte muss die ORCID stehen und die Spalte"
-                         f" muss gültig benannt sein.")
-            return
-
-        for row in reader:
-
-            current_orcid = row[1]
-
-            if current_orcid in orcids:
-                current_expert = self.base[current_orcid]
-                for i, property in enumerate(properties[2:], 1):
-
-                    new_properties = ""
-                    if "," in row[1+i]:
-                        new_properties = row[1+i].split(",")
-                        new_properties = [p.strip() for p in new_properties]
-
-                    current_expert.extend_properties(property, new_properties)
-
-                    self.raw_base[current_orcid][property] = new_properties
-
-                    logger.info(f"Für den Experten {current_orcid} wurde die Eigenschaft '{property}'"
-                                f" mit dem Wert '{new_properties}' angelegt oder überschrieben.")
-            else:
-                logger.warning(f"Der Experte {current_orcid} ist noch nicht Teil der Expert Base.")
-
     def pretty_print(self) -> None:
         """
         Diese Methode druckt die Expert Base lesbar auf der Konsole.
