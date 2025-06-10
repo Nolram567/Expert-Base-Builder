@@ -21,7 +21,7 @@ def create_tadirah_map(file_path: str) -> dict:
     orcids = []
     tadirah = []
 
-    with open(os.path(file_path), newline='', encoding='utf-8') as csvfile:
+    with open(file_path, newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
         for row in reader:
