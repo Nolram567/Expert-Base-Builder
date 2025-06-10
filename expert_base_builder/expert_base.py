@@ -64,7 +64,6 @@ class ExpertBase:
             extracted_name = extraxt_names(person_endpoint_data)
             extracted_keywords = extract_keywords(person_endpoint_data)
             extracted_employment = extract_current_employments(activities_endpoint_data)
-            extracted_work = extract_work_doi(activities_endpoint_data, n = 10)
             extracted_mail = extract_mail(person_endpoint_data)
 
             new_expert = Expert(orcid=orcid,
@@ -73,8 +72,7 @@ class ExpertBase:
                                     "Nachname": extracted_name["family-name"],
                                     "Derzeitige Beschäftigung": extracted_employment,
                                     "Forschungsinteressen": extracted_keywords,
-                                    "E-Mail": extracted_mail,
-                                    "Veröffentlichungen": extracted_work
+                                    "E-Mail": extracted_mail
                                 })
 
             self.base[orcid] = new_expert
