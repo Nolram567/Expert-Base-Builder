@@ -41,5 +41,5 @@ if __name__ == "__main__":
     main(
         csv_file="data/orcids.csv",
         output_qmd = "outputs/expert_qmd",
-        output_yml = "outputs/expertbase.yml"
+        output_yml = "outputs"
     )
