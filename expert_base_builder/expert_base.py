@@ -8,6 +8,30 @@ import json
 
 logger = logging.getLogger(__name__)
 
+def create_tadirah_map(file_path: str) -> dict:
+    """
+    Erstellt ein Dictionary, das die Orcids in der übergebenen Datei auf die korrespondierenden tadirah-Schlagwörter
+    abbildet.
+
+    Args:
+        file_path: Der Dateipfad zu der CSV-Datei.
+    Returns:
+        Ein Dictionary, das die ORCIDS auf die tadirah-Schlagwörter abbildet.
+    """
+    orcids = []
+    tadirah = []
+
+    with open(os.path(file_path), newline='', encoding='utf-8') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)
+        for row in reader:
+            orcids.append(row[1].strip())
+            if "," in row[2]:
+                tadirah_list = row[2].split(",")
+                tadirah.append([t.strip() for t in tadirah_list])
+
+    return dict(zip(orcids, tadirah))
+
 class ExpertBase:
     """
     Objekte dieser Klasse repräsentieren die Expert Base als Bündel von Experten
@@ -48,6 +72,7 @@ class ExpertBase:
         """
 
         orcids = read_orcids_from_csv(path)
+        tadirah_map = create_tadirah_map(path)
 
         logger.info(f"Das Expert-Base-Objekt wird mit den ORCID's aus {path} befüllt.")
 
@@ -72,7 +97,8 @@ class ExpertBase:
                                     "Nachname": extracted_name["family-name"],
                                     "Derzeitige Beschäftigung": extracted_employment,
                                     "Forschungsinteressen": extracted_keywords,
-                                    "E-Mail": extracted_mail
+                                    "E-Mail": extracted_mail,
+                                    "TaDiRAH-Zuordnung": tadirah_map[orcid]
                                 })
 
             self.base[orcid] = new_expert
