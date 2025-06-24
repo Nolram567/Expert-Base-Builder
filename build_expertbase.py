@@ -30,7 +30,7 @@ def main(csv_file: str, output_qmd: str, output_yml: str) -> None:
         for e in expert_base.get_expert_as_list():
             e.parse_qmd(output_qmd)
 
-        # Expert Base als YAML-Datei speichern
+        # Expert Base als YAML-Datei serialisieren
         expert_base.parse_yml(output_yml)
 
     except Exception as e:
