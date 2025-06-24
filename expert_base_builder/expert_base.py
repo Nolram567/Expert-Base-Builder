@@ -34,7 +34,7 @@ def create_tadirah_map(file_path: str) -> dict:
 
 class ExpertBase:
     """
-    Objekte dieser Klasse repräsentieren die Expert Base als Bündel von Experten
+    Objekte dieser Klasse repräsentieren die Expert Base als Bündel von Experten.
 
     Diese Klasse stellt Methoden zur Verfügung, um die Expert Base zu erstellen, zu verwalten und zu serialisieren.
     Die Expert Base wird in der Objektvariable "base" als Dictionary nach folgendem Muster verwaltet:
@@ -108,28 +108,28 @@ class ExpertBase:
 
     def get_base(self) -> dict:
         """
-        Gibt die Objektvariable base zurück.
+        Gibt eine einfache Kopie der Objektvariable base zurück.
         """
         return self.base.copy()
 
     def get_expert_as_list(self) -> List[Expert]:
         """
-        Die Methode gibt alle Experten des ExpertBase Objekts als Liste zurück
+        Die Methode gibt alle Experten-Objekte des Expertbase-Objekts als Liste zurück.
         """
         return list(self.base.values())
 
     def get_orcids_as_list(self) -> List[str]:
         """
-        Die Methode gibt die ORCIDs aller Experten in der Expert Base zurück.
+        Die Methode gibt die ORCIDs aller Experten in der Expertbase zurück.
         """
         return list(self.base.keys())
 
     def deserialize_expert_base(self, path: str) -> None:
         """
-        Die Methode deserialisiert ein Expert Base Objekt.
+        Die Methode deserialisiert ein Expertbase-Objekt.
 
         Args:
-            path: Der Dateipfad, unter dem das Expert Base Objekt abgespeichert werden soll.
+            path: Der Dateipfad, unter dem das Expertbase-Objekt abgespeichert werden soll.
         """
         try:
             with open(path, "r", encoding='utf-8') as f:
@@ -148,15 +148,15 @@ class ExpertBase:
 
                 self.base[orcid] = new_expert
 
-            logger.info(f"Das Expert Base Objekt wurde erfolgreich von {path} eingelesen.")
+            logger.info(f"Das Expertbase-Objekt wurde erfolgreich von {path} eingelesen.")
 
         except IOError as e:
 
-            logger.error(f"Fehler beim Deserialisieren der Expert Base unter {path}:\n{e}")
+            logger.error(f"Fehler beim Deserialisieren der Expertbase unter {path}:\n{e}")
 
     def serialize_expert_base(self, path: str, name: str) -> None:
         """
-        Diese Methode serialisiert das Expert Base Objekt als JSON-Datei.
+        Diese Methode serialisiert das Expertbase-Objekt als JSON-Datei.
 
         Args:
             path: Der Dateipfad, unter dem das Expert Base Objekt serialisiert werden soll.
@@ -167,7 +167,7 @@ class ExpertBase:
         with open(os.path.join(path, name), "w", encoding='utf-8') as f:
             json.dump(self.raw_base, f, indent=4, ensure_ascii=False)
 
-        logger.info(f"Das Expert Base Objekt wurde erfolgreich unter {path} serialisiert.")
+        logger.info(f"Das Expertbase-Objekt wurde erfolgreich unter {path} serialisiert.")
 
     def pretty_print(self) -> None:
         """
@@ -177,13 +177,13 @@ class ExpertBase:
 
     def parse_yml(self, path: str) -> None:
         """
-        Diese Methode parst ein ExpertBase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
+        Diese Methode parst ein Expertbase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
             path: Der Dateipfad und der Name der Ausgabedatei.
         """
 
-        logger.info(f"Das Expert-Base-Objekt wird zu einer YAML-Datei geparst.")
+        logger.info(f"Das Expertbase-Objekt wird zu einer YAML-Datei geparst.")
 
         entries = []
 
@@ -211,4 +211,4 @@ class ExpertBase:
         with open(os.path.join(path, "expertbase.yml"), "w", encoding="utf-8") as f:
             yaml.dump(entries, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
-        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
+        logger.info(f"Das Expertbase-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
