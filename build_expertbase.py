@@ -1,7 +1,10 @@
 import logging
 from expert_base_builder.expert_base import ExpertBase
 
-
+'''
+Konfiguration des Loggers: Die Ausgaben werden sowohl auf der Konsole gedruckt als auch in die Datei "build_expert_base.log"
+geschrieben, die in der CI-Pipeline als Artefakt gespeichert wird.
+'''
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
