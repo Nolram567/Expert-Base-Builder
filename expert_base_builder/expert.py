@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def search_wikidata_id(search_string: str) -> str:
     """
-    Diese Funktion sucht die Wikidata-qid für eine Entität
+    Diese Funktion sucht die Wikidata-qid für eine Entität.
 
     Args:
         search_string: Die Entität, nach der gesucht wird.
@@ -34,7 +34,7 @@ def search_wikidata_id(search_string: str) -> str:
 
 class Expert:
     """
-    Objekte dieser Klasse repräsentieren einen Experten der HERMES-Expert-Base.
+    Objekte dieser Klasse repräsentieren einen Experten der HERMES-Expertbase.
 
     Diese Klasse stellt Methoden zur Verfügung, um einzelne Experten zu erstellen, zu verwalten und in semantische
     Repräsentationen zu übersetzen.
@@ -78,7 +78,8 @@ class Expert:
         Diese Methode gibt den Namen des Expertenobjekts zurück.
 
         Args:
-            formated: Spezifiziert, ob der Name als Einzelstring formatiert zurückgegeben werden soll oder als Tupel mit dem Vor- und Nachnamen.
+            formated: Spezifiziert, ob der Name als Einzelstring formatiert zurückgegeben werden soll oder als Tupel mit
+            dem Vor- und Nachnamen.
         """
         return (
             f"{self.properties.get('Vorname', '')} {self.properties.get('Nachname', '')}"
@@ -172,7 +173,14 @@ class Expert:
             return self.properties.get("Forschungsinteressen", [])
 
     def get_tadirah(self, formated=True) -> list[str] or str:
+        """
+        Diese Methode gibt die tadirah-Schlagwörter des Experten als Liste oder als string zurück.
 
+        Args:
+            formated: Wenn dieses Argument true ist, dann werden die Wörter konkatentiert und mit Semikola getrennt.
+        Returns:
+            Die tadirah-Schlagwörter des Experten als String oder Liste von Strings.
+        """
         if formated:
             tadirah = self.properties.get("TaDiRAH-Zuordnung", [])
             return ";".join(tadirah)
