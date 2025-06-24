@@ -243,10 +243,10 @@ class Expert:
     @staticmethod
     def __format_orcid_keywords(keywords: List[str]) -> str:
         """
-        Die Helfermethode baut und formatiert das div-Element für die ORCID-Schlagworte auf der Personenseite.
+        Die Helfermethode baut und formatiert das div-Element für die ORCID-Schlagwörter auf der Personenseite.
 
         Args:
-            keywords: Die Keywords als Liste
+            keywords: Die Keywords als Liste.
         Returns:
             Die ORCID Keywords als HTML Markup für die Personenseite.
         """
