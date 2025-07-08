@@ -1,7 +1,11 @@
 import csv
+import json
+from xml.etree.ElementTree import indent
+
 import requests
 import logging
 from typing import List, Dict
+from datetime import date
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
 
@@ -93,7 +97,27 @@ def extract_current_employments(orcid_data: dict or None) -> list:
 
         current_summary = employment.get("summaries", [])[0].get("employment-summary", {})
 
+        # Wenn das Enddatum nicht definiert ist
         if current_summary["end-date"] is None:
+            current_employments.append([current_summary.get("role-title", ""),
+                                        current_summary.get("department-name", ""),
+                                        current_summary.get("organization", {}).get("name", "")]
+                                       )
+            continue
+
+        # übersprigen, wenn das Enddatum in der Vergangenheit liegt
+        if int(current_summary["end-date"]["year"]['value']) < date.today().year:
+            continue
+
+        # Wenn das Enddatum in der Zukunft liegt
+        year = int(current_summary.get('end-date')['year']['value'])
+        month = int(current_summary.get('end-date')['month']['value'])
+        day = int(current_summary.get('end-date')['day']['value'])
+
+        given_date = date(year, month, day)
+        today = date.today()
+
+        if given_date > today:
             current_employments.append([current_summary.get("role-title", ""),
                                         current_summary.get("department-name", ""),
                                         current_summary.get("organization", {}).get("name", "")]
