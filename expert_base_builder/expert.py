@@ -1,9 +1,11 @@
 import os
+from json import JSONDecodeError
 from typing import List
 import chevron
 import requests
 import logging
 import json
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +26,20 @@ def search_wikidata_id(search_string: str) -> str:
         "search": search_string
     }
     response = requests.get("https://www.wikidata.org/w/api.php", params=params)
-    data = response.json()
 
-    if data['search']:
-        return data['search'][0]['id']
-    else:
-        logger.warning("Die Eingabe wurde nicht in wikidata gefunden. Gebe Eingabe zurück...")
+    try:
+        data = response.json()
+
+        if data['search']:
+            return data['search'][0]['id']
+        else:
+            logger.warning("Die Eingabe wurde nicht in wikidata gefunden. Gebe Eingabe zurück...")
+            return search_string
+
+    except JSONDecodeError as e:
+        logger.error(f"Die Antwort von Wikidata konnte nicht dekodiert werden:\n"
+                     f"Eingabe:{response.text}\n"
+                     f"Stacktrace:{e}")
         return search_string
 
 class Expert:
