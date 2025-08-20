@@ -17,13 +17,21 @@ def read_orcids_from_csv(file_path: str) -> List[str]:
 
     Returns:
         Liste der ORCID-Bezeichner.
+
+    Raises:
+        IOError: Wenn die Datei unter dem spezifizierten Pfad nicht gefunden wurde.
     """
     orcids = []
-    with open(file_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)
-        for row in reader:
-            orcids.append(row[1].strip())
+    try:
+        with open(file_path, newline='', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)
+            for row in reader:
+                orcids.append(row[1].strip())
+    except IOError as e:
+        logger.error(f"Die Datei {file_path} konnte nicht geöffnet werden:\n {e}")
+        raise
+
     return orcids
 
 def fetch_orcid_data(orcid: str, endpoint: str) -> dict or None:
