@@ -216,7 +216,8 @@ class ExpertBase:
     def add_properties_from_csv(self, path: str) -> None:
 
         """
-        Mit dieser Datei können die Eigenschaften der Experten in der Expert Base erweitert oder überschrieben werden.
+        Mit dieser In-place Methode können die Eigenschaften der Experten in der Expert Base erweitert oder
+        überschrieben werden.
         Die Eigenschaften werden in einer CSV-Datei nach dem folgenden Muster definiert:
 
         | name | orcid | neue_eigenschaft | neue_eigenschaft_2|(...)\n
