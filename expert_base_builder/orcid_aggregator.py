@@ -81,6 +81,8 @@ def extract_mail(orcid_data: Optional[dict]) -> str:
 
     Args:
         orcid_data: Die ORCID-Daten vom /person-Endpunkt der ORCID-API.
+    Returns:
+        Die E-Mail als String.
     """
     emails = orcid_data.get("emails", {}).get("email", [])
     email_str = emails[0].get("email", "") if emails else ""
