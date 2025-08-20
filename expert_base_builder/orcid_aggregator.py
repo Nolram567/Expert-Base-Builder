@@ -145,39 +145,3 @@ def extract_keywords(orcid_data: dict) -> List[str]:
     for k in orcid_data["keywords"]["keyword"]:
         keywords.append(k["content"])
     return keywords
-
-def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
-    """
-    Extrahiert die DOI der Publikationen aus einem Aktivitätendatensatz.
-
-    Args:
-        orcid_data: Die ORCID-Daten vom /activities-Endpunkt der ORCID-API.
-        n: Die Zahl der Publikationen, die nach DOI durchsucht werden soll. Wenn alle durchsucht werden sollen, übergib
-        float("inf") als Argument.
-
-    Returns:
-        Extrahierte DOI's als Liste aus Strings.
-    """
-
-    dois = []
-
-    publications = orcid_data.get("works", {}).get("group", [])
-
-    for i, work in enumerate(publications):
-        if i == n:
-            break
-
-        ids = work.get("external-ids", {}).get("external-id", [])
-
-        current_doi = ""
-
-        for id in ids:
-            if id.get("external-id-type", "") == "doi":
-                current_doi = id.get("external-id-value", "")
-
-        if current_doi:
-            dois.append(current_doi)
-        else:
-            pass
-
-    return dois
