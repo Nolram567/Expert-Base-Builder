@@ -1,11 +1,9 @@
 import os
 from json import JSONDecodeError
-from typing import List
 import chevron
 import requests
 import logging
 import json
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +81,7 @@ class Expert:
         """
         return self.orcid
 
-    def get_name(self, formated: bool = True) -> str or tuple[str, str]:
+    def get_name(self, formated: bool = True) -> str | tuple[str, str]:
         """
         Diese Methode gibt den Namen des Expertenobjekts zurück.
 
@@ -102,7 +100,7 @@ class Expert:
 
     def get_current_employment(
         self, n, formated=True
-    ) -> str or list[tuple[str, str, str]]:
+    ) -> str | list[tuple[str, str, str]]:
         """
         Diese Methode gibt die derzeitige Beschäftigung als Liste von Tripeln zurück.
 
@@ -141,7 +139,7 @@ class Expert:
         """
         return self.properties.get("E-Mail", "")
 
-    def get_organisation(self) -> List[str]:
+    def get_organisation(self) -> list[str]:
         """
         Die Methode gibt die Organisationen zurück, an denen der Experte derzeit beschäftigt ist.
         """
@@ -162,7 +160,7 @@ class Expert:
 
         return list(qids.values())
 
-    def get_research_interest(self, formated=True) -> List[str] or str:
+    def get_research_interest(self, formated=True) -> list[str] | str:
         """
         Die Methode gibt die Forschungsinteressen (ORCID-Keywords) des Experten zurück.
 
@@ -182,7 +180,7 @@ class Expert:
         else:
             return self.properties.get("Forschungsinteressen", [])
 
-    def get_tadirah(self, formated=True) -> list[str] or str:
+    def get_tadirah(self, formated=True) -> list[str] | str:
         """
         Diese Methode gibt die tadirah-Schlagwörter des Experten als Liste oder als string zurück.
 
@@ -199,7 +197,7 @@ class Expert:
 
     def extend_properties(self, property: str, value) -> None:
         """
-        Die Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
+        Die In-place Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
 
         Args:
             property: Der Name der Eigenschaft.
@@ -251,7 +249,7 @@ class Expert:
         )
 
     @staticmethod
-    def __format_orcid_keywords(keywords: List[str]) -> str:
+    def __format_orcid_keywords(keywords: list[str]) -> str:
         """
         Die Helfermethode baut und formatiert das div-Element für die ORCID-Schlagwörter auf der Personenseite.
 
@@ -277,7 +275,7 @@ class Expert:
         return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
     @staticmethod
-    def __format_tadirah_keywords(keywords: List[str]) -> str:
+    def __format_tadirah_keywords(keywords: list[str]) -> str:
         """
         Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte auf der Personenseite.
 
