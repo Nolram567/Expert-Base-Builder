@@ -1,7 +1,7 @@
 import csv
 import requests
 import logging
-from typing import List, Dict
+from typing import List, Dict, Optional
 from datetime import date
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
@@ -34,7 +34,7 @@ def read_orcids_from_csv(file_path: str) -> List[str]:
 
     return orcids
 
-def fetch_orcid_data(orcid: str, endpoint: str) -> dict or None:
+def fetch_orcid_data(orcid: str, endpoint: str) -> Optional[Dict]:
     """
     Fragt Daten für eine Person über die ORCID API ab.
 
@@ -54,7 +54,7 @@ def fetch_orcid_data(orcid: str, endpoint: str) -> dict or None:
         logger.warning(f"Fehler beim Abrufen von ORCID {orcid}: {response.status_code}")
         return None
 
-def extraxt_names(orcid_data: dict or None) -> Dict[str, str]:
+def extraxt_names(orcid_data: Optional[dict]) -> Dict[str, str]:
     """
     Extrahiert die Namen aus einem Personendatensatz.
 
@@ -75,7 +75,7 @@ def extraxt_names(orcid_data: dict or None) -> Dict[str, str]:
 
     return extracted
 
-def extract_mail(orcid_data: dict or None) -> str:
+def extract_mail(orcid_data: Optional[dict]) -> str:
     """
     Extrahiert die erste E-Mail-Adresse aus einem Personendatensatz.
 
@@ -86,7 +86,7 @@ def extract_mail(orcid_data: dict or None) -> str:
     email_str = emails[0].get("email", "") if emails else ""
     return email_str
 
-def extract_current_employments(orcid_data: dict or None) -> list:
+def extract_current_employments(orcid_data: Optional[dict]) -> list:
     """
     Extrahiert die derzeit aktiven Beschäftigungsverhältnisse aus einem Personendatensatz.
 
