@@ -130,6 +130,9 @@ class ExpertBase:
 
         Args:
             path: Der Dateipfad, unter dem das Expert Base Objekt abgespeichert werden soll.
+
+        Raises:
+            IOError: Wenn die Datei unter dem spzifizierten Pfad nicht gefunden wurde.
         """
         try:
             with open(path, "r", encoding='utf-8') as f:
@@ -151,8 +154,8 @@ class ExpertBase:
             logger.info(f"Das Expert Base Objekt wurde erfolgreich von {path} eingelesen.")
 
         except IOError as e:
-
             logger.error(f"Fehler beim Deserialisieren der Expert Base unter {path}:\n{e}")
+            raise
 
     def serialize_expert_base(self, path: str) -> None:
         """
@@ -222,6 +225,9 @@ class ExpertBase:
 
         Args:
              path: Der Dateipfad zu der CSV-Datei.
+
+        Raises:
+            IOError: Wenn die CSV-Datei nicht gefunden wurde.
         """
 
         try:
@@ -231,7 +237,7 @@ class ExpertBase:
             orcids = self.get_orcids_as_list()
         except IOError as e:
             logger.error(f"Die Datei {path} konnte nicht geöffnet werden:\n {e}")
-            return
+            raise
 
         if len(properties) < 2:
             logger.warning(f"Die CSV-Datei ist ungültig. Es muss mindestens 3 Spalten geben. Abbruch...")
