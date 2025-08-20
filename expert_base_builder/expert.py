@@ -1,11 +1,9 @@
 import os
 from json import JSONDecodeError
-from typing import List
 import chevron
 import requests
 import logging
 import json
-import traceback
 
 logger = logging.getLogger(__name__)
 
