@@ -112,13 +112,13 @@ class ExpertBase:
         """
         return self.base.copy()
 
-    def get_expert_as_list(self) -> List[Expert]:
+    def get_expert_as_list(self) -> list[Expert]:
         """
         Die Methode gibt alle Experten-Objekte des Expertbase-Objekts als Liste zurück.
         """
         return list(self.base.values())
 
-    def get_orcids_as_list(self) -> List[str]:
+    def get_orcids_as_list(self) -> list[str]:
         """
         Die Methode gibt die ORCIDs aller Experten in der Expertbase zurück.
         """
