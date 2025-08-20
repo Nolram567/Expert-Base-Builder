@@ -37,6 +37,7 @@ def main(csv_file: str, csv_extension: str, output_qmd: str, output_yml: str) ->
 
     except Exception as e:
         logger.error(f"Ein unerwarteter Fehler ist aufgetreten: {e}", exc_info=True)
+        raise
 
 
 if __name__ == "__main__":
