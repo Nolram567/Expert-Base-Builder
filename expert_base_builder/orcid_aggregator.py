@@ -1,6 +1,7 @@
 import csv
 import requests
 import logging
+from typing import List, Dict, Optional
 from datetime import date
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
