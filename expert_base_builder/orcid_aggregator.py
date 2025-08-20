@@ -1,17 +1,13 @@
 import csv
-import json
-from xml.etree.ElementTree import indent
-
 import requests
 import logging
-from typing import List, Dict
 from datetime import date
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
 
 logger = logging.getLogger(__name__)
 
-def read_orcids_from_csv(file_path: str) -> List[str]:
+def read_orcids_from_csv(file_path: str) -> list[str]:
     """
     Liest ORCID-Bezeichner aus der zweiten Spalte einer CSV-Datei ein.
 
@@ -20,16 +16,24 @@ def read_orcids_from_csv(file_path: str) -> List[str]:
 
     Returns:
         Liste der ORCID-Bezeichner.
+
+    Raises:
+        IOError: Wenn die Datei unter dem spezifizierten Pfad nicht gefunden wurde.
     """
     orcids = []
-    with open(file_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)
-        for row in reader:
-            orcids.append(row[1].strip())
+    try:
+        with open(file_path, newline='', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)
+            for row in reader:
+                orcids.append(row[1].strip())
+    except IOError as e:
+        logger.error(f"Die Datei {file_path} konnte nicht geöffnet werden:\n {e}")
+        raise
+
     return orcids
 
-def fetch_orcid_data(orcid: str, endpoint: str) -> dict or None:
+def fetch_orcid_data(orcid: str, endpoint: str) -> dict | None:
     """
     Fragt Daten für eine Person über die ORCID API ab.
 
@@ -49,7 +53,7 @@ def fetch_orcid_data(orcid: str, endpoint: str) -> dict or None:
         logger.warning(f"Fehler beim Abrufen von ORCID {orcid}: {response.status_code}")
         return None
 
-def extraxt_names(orcid_data: dict or None) -> Dict[str, str]:
+def extraxt_names(orcid_data: dict | None) -> dict[str, str]:
     """
     Extrahiert die Namen aus einem Personendatensatz.
 
@@ -70,18 +74,20 @@ def extraxt_names(orcid_data: dict or None) -> Dict[str, str]:
 
     return extracted
 
-def extract_mail(orcid_data: dict or None) -> str:
+def extract_mail(orcid_data: dict | None) -> str:
     """
     Extrahiert die erste E-Mail-Adresse aus einem Personendatensatz.
 
     Args:
         orcid_data: Die ORCID-Daten vom /person-Endpunkt der ORCID-API.
+    Returns:
+        Die E-Mail als String.
     """
     emails = orcid_data.get("emails", {}).get("email", [])
     email_str = emails[0].get("email", "") if emails else ""
     return email_str
 
-def extract_current_employments(orcid_data: dict or None) -> list:
+def extract_current_employments(orcid_data: dict | None) -> list:
     """
     Extrahiert die derzeit aktiven Beschäftigungsverhältnisse aus einem Personendatensatz.
 
@@ -125,7 +131,7 @@ def extract_current_employments(orcid_data: dict or None) -> list:
 
     return current_employments
 
-def extract_keywords(orcid_data: dict) -> List[str]:
+def extract_keywords(orcid_data: dict) -> list[str]:
     """
     Extrahiert eine Liste von Keywords aus einem Personendatensatz.
 
@@ -140,39 +146,3 @@ def extract_keywords(orcid_data: dict) -> List[str]:
     for k in orcid_data["keywords"]["keyword"]:
         keywords.append(k["content"])
     return keywords
-
-def extract_work_doi(orcid_data: dict, n: int or float("inf")) -> List[str]:
-    """
-    Extrahiert die DOI der Publikationen aus einem Aktivitätendatensatz.
-
-    Args:
-        orcid_data: Die ORCID-Daten vom /activities-Endpunkt der ORCID-API.
-        n: Die Zahl der Publikationen, die nach DOI durchsucht werden soll. Wenn alle durchsucht werden sollen, übergib
-        float("inf") als Argument.
-
-    Returns:
-        Extrahierte DOI's als Liste aus Strings.
-    """
-
-    dois = []
-
-    publications = orcid_data.get("works", {}).get("group", [])
-
-    for i, work in enumerate(publications):
-        if i == n:
-            break
-
-        ids = work.get("external-ids", {}).get("external-id", [])
-
-        current_doi = ""
-
-        for id in ids:
-            if id.get("external-id-type", "") == "doi":
-                current_doi = id.get("external-id-value", "")
-
-        if current_doi:
-            dois.append(current_doi)
-        else:
-            pass
-
-    return dois
