@@ -1,14 +1,13 @@
 import csv
 import requests
 import logging
-from typing import List, Dict, Optional
 from datetime import date
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
 
 logger = logging.getLogger(__name__)
 
-def read_orcids_from_csv(file_path: str) -> List[str]:
+def read_orcids_from_csv(file_path: str) -> list[str]:
     """
     Liest ORCID-Bezeichner aus der zweiten Spalte einer CSV-Datei ein.
 
@@ -34,7 +33,7 @@ def read_orcids_from_csv(file_path: str) -> List[str]:
 
     return orcids
 
-def fetch_orcid_data(orcid: str, endpoint: str) -> Optional[Dict]:
+def fetch_orcid_data(orcid: str, endpoint: str) -> dict | None:
     """
     Fragt Daten für eine Person über die ORCID API ab.
 
@@ -54,7 +53,7 @@ def fetch_orcid_data(orcid: str, endpoint: str) -> Optional[Dict]:
         logger.warning(f"Fehler beim Abrufen von ORCID {orcid}: {response.status_code}")
         return None
 
-def extraxt_names(orcid_data: Optional[dict]) -> Dict[str, str]:
+def extraxt_names(orcid_data: dict | None) -> dict[str, str]:
     """
     Extrahiert die Namen aus einem Personendatensatz.
 
@@ -75,7 +74,7 @@ def extraxt_names(orcid_data: Optional[dict]) -> Dict[str, str]:
 
     return extracted
 
-def extract_mail(orcid_data: Optional[dict]) -> str:
+def extract_mail(orcid_data: dict | None) -> str:
     """
     Extrahiert die erste E-Mail-Adresse aus einem Personendatensatz.
 
@@ -88,7 +87,7 @@ def extract_mail(orcid_data: Optional[dict]) -> str:
     email_str = emails[0].get("email", "") if emails else ""
     return email_str
 
-def extract_current_employments(orcid_data: Optional[dict]) -> list:
+def extract_current_employments(orcid_data: dict | None) -> list:
     """
     Extrahiert die derzeit aktiven Beschäftigungsverhältnisse aus einem Personendatensatz.
 
@@ -132,7 +131,7 @@ def extract_current_employments(orcid_data: Optional[dict]) -> list:
 
     return current_employments
 
-def extract_keywords(orcid_data: dict) -> List[str]:
+def extract_keywords(orcid_data: dict) -> list[str]:
     """
     Extrahiert eine Liste von Keywords aus einem Personendatensatz.
 
