@@ -191,7 +191,7 @@ class Expert:
 
     def extend_properties(self, property: str, value) -> None:
         """
-        Die Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
+        Die In-place Methode erweitert oder ersetzt die Eigenschaften des Expertenobjekts.
 
         Args:
             property: Der Name der Eigenschaft.
