@@ -1,44 +1,75 @@
 import os
-from json import JSONDecodeError
+import json
 import chevron
 import requests
 import logging
-import json
+import time
 
 logger = logging.getLogger(__name__)
 
-
-def search_wikidata_id(search_string: str) -> str:
+def search_wikidata_id(search_string: str, max_retries: int = 5) -> str:
     """
-    Diese Funktion sucht die Wikidata-qid für eine Entität.
+    Diese Funktion sucht die Wikidata-QID für eine Entität.
+
+    Sie respektiert die Wikidata Robot Policy:
+    - Setzt einen User-Agent Header mit Kontaktinfo
+    - Handhabt 429-Rate-Limit-Fehler mit exponentiellem Backoff
 
     Args:
         search_string: Die Entität, nach der gesucht wird.
+        max_retries: Anzahl der Wiederholungsversuche bei 429/Serverfehlern.
     Returns:
         Die QID oder der Suchstring, wenn kein Eintrag gefunden wird.
     """
+    headers = {
+        "User-Agent": "MyWikidataBot/1.0 (https://github.com/Nolram567/Expert-Base-Builder; mbgdevelopment@proton.me)"
+    }
+
     params = {
         "action": "wbsearchentities",
         "language": "de",
         "format": "json",
         "search": search_string
     }
-    response = requests.get("https://www.wikidata.org/w/api.php", params=params)
 
-    try:
-        data = response.json()
+    retries = 0
+    backoff = 1  # Sekunden
 
-        if data['search']:
-            return data['search'][0]['id']
-        else:
-            logger.warning("Die Eingabe wurde nicht in wikidata gefunden. Gebe Eingabe zurück...")
+    while retries <= max_retries:
+        try:
+            response = requests.get(
+                "https://www.wikidata.org/w/api.php",
+                params=params,
+                headers=headers,
+                timeout=10
+            )
+
+            # Falls Rate-Limit
+            if response.status_code == 429:
+                logger.warning(f"HTTP-Statuscode 429 Too Many Requests – Warte {backoff} Sekunden...")
+                time.sleep(backoff)
+                retries += 1
+                backoff = min(backoff * 2, 60)  # Max. 1 Minute warten
+                continue
+
+            response.raise_for_status()
+            data = response.json()
+
+            if data.get('search'):
+                return data['search'][0]['id']
+            else:
+                logger.warning("Die Eingabe wurde nicht in Wikidata gefunden. Gebe Eingabe zurück...")
+                return search_string
+
+        except json.JSONDecodeError as e :
+            logger.error(f"Die Antwort von Wikidata konnte nicht dekodiert werde: {e}.")
+            return search_string
+        except requests.RequestException as e:
+            logger.error(f"Wikidata-Request fehlgeschlagen: {e}")
             return search_string
 
-    except JSONDecodeError as e:
-        logger.error(f"Die Antwort von Wikidata konnte nicht dekodiert werden:\n"
-                     f"Eingabe:{response.text}\n"
-                     f"Stacktrace:{e}")
-        return search_string
+    logger.error("Maximale Anzahl an Retries erreicht.")
+    return search_string
 
 class Expert:
     """
