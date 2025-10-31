@@ -293,7 +293,7 @@ class Expert:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
         builder = ['<div class="orcid-keywords">']
-        builder.extend(f'<span class="tag">{word}</span>' for word in keywords)
+        builder.extend(f'<span class="tag-detail">{word}</span>' for word in keywords)
         builder.append("</div>")
 
         return "".join(builder)
@@ -322,7 +322,7 @@ class Expert:
             tooltips = json.load(file)
 
         builder = ['<div class="tadirah-keywords">']
-        builder.extend(f'<span class="tag_tadirah">{Expert.__format_tooltip(word, tooltips.get(word, ""))}</span>' for word in keywords)
+        builder.extend(f'<span class="tag-tadirah-detail">{Expert.__format_tooltip(word, tooltips.get(word, ""))}</span>' for word in keywords)
         builder.append("</div>")
 
         return "".join(builder)
