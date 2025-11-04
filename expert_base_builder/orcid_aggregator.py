@@ -117,9 +117,17 @@ def extract_current_employments(orcid_data: dict | None) -> list:
             continue
 
         # Wenn das Enddatum in der Zukunft liegt
-        year = int(current_summary.get('end-date')['year']['value'])
-        month = int(current_summary.get('end-date')['month']['value'])
-        day = int(current_summary.get('end-date')['day']['value'])
+        if current_summary is None:
+            continue
+
+        end = current_summary.get('end-date') or {}
+        year_val = (end.get('year') or {}).get('value')
+        month_val = (end.get('month') or {}).get('value', 1)
+        day_val = (end.get('day') or {}).get('value', 1)
+
+        year = int(year_val) if year_val is not None else 2050
+        month = int(month_val) if month_val is not None else 1
+        day = int(day_val) if day_val is not None else 1
 
         given_date = date(year, month, day)
         today = date.today()
