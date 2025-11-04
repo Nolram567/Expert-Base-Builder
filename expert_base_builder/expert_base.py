@@ -34,10 +34,10 @@ def create_tadirah_map(file_path: str) -> dict:
 
 class ExpertBase:
     """
-    Objekte dieser Klasse repräsentieren die Expert Base als Bündel von Experten.
+    Objekte dieser Klasse repräsentieren die Expertbase als Collection von Expert-Objekten.
 
-    Diese Klasse stellt Methoden zur Verfügung, um die Expert Base zu erstellen, zu verwalten und zu serialisieren.
-    Die Expert Base wird in der Objektvariable "base" als Dictionary nach folgendem Muster verwaltet:
+    Diese Klasse stellt Methoden zur Verfügung, um die Expertbase zu erstellen, zu verwalten und zu serialisieren.
+    Die Expertbase wird in der Objektvariable "base" als Dictionary nach folgendem Muster verwaltet:
     {orcid: Objekt der Klasse Experte,
     (...)
     }
@@ -104,7 +104,7 @@ class ExpertBase:
             self.base[orcid] = new_expert
             self.raw_base[orcid] = new_expert.get_properties()
 
-        logger.info(f"Das Expert-Base-Objekt wurde erfolgreich mit den ORCID's aus {path} befüllt.")
+        logger.info(f"Das Expertbase-Objekt wurde erfolgreich mit den ORCID's aus {path} befüllt.")
 
     def get_base(self) -> dict:
         """
@@ -132,7 +132,7 @@ class ExpertBase:
             path: Der Dateipfad, unter dem das Expertbase-Objekt abgespeichert werden soll.
 
         Raises:
-            IOError: Wenn die Datei unter dem spzifizierten Pfad nicht gefunden wurde.
+            IOError: Wenn die Datei unter dem spezifizierten Pfad nicht gefunden wurde.
         """
         try:
             with open(path, "r", encoding='utf-8') as f:
@@ -163,6 +163,7 @@ class ExpertBase:
 
         Args:
             path: Der Dateipfad, unter dem das Expert Base Objekt serialisiert werden soll.
+            name: Der Name der Datei.
         """
 
         os.makedirs(path, exist_ok=True)
@@ -174,13 +175,13 @@ class ExpertBase:
 
     def pretty_print(self) -> None:
         """
-        Diese Methode druckt die Expert Base lesbar auf der Konsole.
+        Diese Methode druckt die Expertbase menschenlesbar auf der Konsole.
         """
         print(json.dumps(self.raw_base, indent=4, ensure_ascii=False))
 
     def parse_yml(self, path: str) -> None:
         """
-        Diese Methode parst ein Expertbase-Objekt zu einer Yaml-Datei, die mit quarto listings kompatibel ist.
+        Diese Methode parst ein Expertbase-Objekt zu einer yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
             path: Der Dateipfad und der Name der Ausgabedatei.
@@ -217,9 +218,8 @@ class ExpertBase:
         logger.info(f"Das Expertbase-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
 
     def add_properties_from_csv(self, path: str) -> None:
-
         """
-        Mit dieser In-place Methode können die Eigenschaften der Experten in der Expert Base erweitert oder
+        Mit dieser In-place Methode können die Eigenschaften der Experten in der Expertbase erweitert oder
         überschrieben werden.
         Die Eigenschaften werden in einer CSV-Datei nach dem folgenden Muster definiert:
 
@@ -246,7 +246,6 @@ class ExpertBase:
         if len(properties) < 2:
             logger.warning(f"Die CSV-Datei ist ungültig. Es muss mindestens 3 Spalten geben. Abbruch...")
             return
-
 
         elif not properties[0].lower() == "orcid":
             logger.warning(f"Die CSV-Datei ist ungültig. In der zweiten Spalte muss die ORCID stehen und die Spalte"
