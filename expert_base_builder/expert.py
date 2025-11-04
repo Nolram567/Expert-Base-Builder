@@ -136,7 +136,7 @@ class Expert:
         Diese Methode gibt die derzeitige Beschäftigung als Liste von Tripeln zurück.
 
         Args:
-            formated: Spezifiert, ob die Rückgabe formatiert sein soll.
+            formated: Spezifiziert, ob die Rückgabe formatiert sein soll.
             n: Spezifiziert, wie viele Beschäftigungsverhältnisse maximal aufgenommen werden sollen.
 
         Returns:
@@ -172,7 +172,8 @@ class Expert:
 
     def get_organisation(self) -> list[str]:
         """
-        Die Methode gibt die Organisationen zurück, an denen der Experte derzeit beschäftigt ist.
+        Die Methode gibt die Organisationen zurück, an denen der Experte derzeit beschäftigt ist. Sie nutzt die wikidata
+        qid, um Duplikate in unterschiedlichen Schreibungen zu identifizieren.
         """
         current_employment = self.properties.get("Derzeitige Beschäftigung", [])
         organisations = []
@@ -216,7 +217,7 @@ class Expert:
         Diese Methode gibt die tadirah-Schlagwörter des Experten als Liste oder als string zurück.
 
         Args:
-            formated: Wenn dieses Argument true ist, dann werden die Wörter konkatentiert und mit Semikola getrennt.
+            formated: Wenn dieses Argument true ist, dann werden die Wörter konkateniert und mit Semikola getrennt.
         Returns:
             Die tadirah-Schlagwörter des Experten als String oder Liste von Strings.
         """
@@ -306,7 +307,7 @@ class Expert:
         return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
     @staticmethod
-    def __format_tadirah_keywords(keywords: list[str]) -> str:
+    def __format_tadirah_keywords(keywords: list[str], path: str = "data/tadirah_tooltips.json") -> str:
         """
         Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte auf der Personenseite.
 
@@ -318,7 +319,7 @@ class Expert:
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
-        with open('data/tadirah_tooltips.json', 'r', encoding="utf-8") as file:
+        with open(path, 'r', encoding="utf-8") as file:
             tooltips = json.load(file)
 
         builder = ['<div class="tadirah-keywords">']
