@@ -89,6 +89,8 @@ class Expert:
     }
     """
 
+    tadirah_tooltips_path = "data/tadirah_tooltips.json"
+
     def __init__(self, orcid: str, data: dict):
         """
         Der Konstruktor der Klasse.
@@ -237,7 +239,7 @@ class Expert:
         """
         self.properties[property] = value
 
-    def parse_qmd(self, path: str) -> None:
+    def parse_qmd(self, output_directory_path: str, path: str = "html/expert-template.qmd") -> None:
         """
         Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
@@ -247,7 +249,7 @@ class Expert:
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
 
-        with open("html/expert-template.qmd", "r", encoding="utf-8") as qmd_template:
+        with open(path, "r", encoding="utf-8") as qmd_template:
             template = qmd_template.read()
 
         formated_research_interest = Expert.__format_orcid_keywords(self.get_research_interest(formated=False))
@@ -265,13 +267,13 @@ class Expert:
             },
         )
 
-        output_path = os.path.join(path,
+        output_path = os.path.join(output_directory_path,
                             f"{self.get_name(formated=False)[0].lower().strip().replace(" ", "-")}"
                             f"-"
                             f"{self.get_name(formated=False)[1].lower().strip().replace(" ", "-")}"
                             f".qmd")
 
-        os.makedirs(path, exist_ok=True)
+        os.makedirs(output_directory_path, exist_ok=True)
 
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(formated_template)
@@ -307,7 +309,7 @@ class Expert:
         return f'<abbr data-tooltip="{tip}">{keyword}</abbr>'
 
     @staticmethod
-    def __format_tadirah_keywords(keywords: list[str], path: str = "data/tadirah_tooltips.json") -> str:
+    def __format_tadirah_keywords(keywords: list[str]) -> str:
         """
         Die Helfermethode baut und formatiert das div-Element für die tadirah-Schlagworte auf der Personenseite.
 
@@ -319,7 +321,7 @@ class Expert:
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
 
-        with open(path, 'r', encoding="utf-8") as file:
+        with open(Expert.tadirah_tooltips_path, 'r', encoding="utf-8") as file:
             tooltips = json.load(file)
 
         builder = ['<div class="tadirah-keywords">']
