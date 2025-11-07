@@ -22,7 +22,12 @@ console_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s
 console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
 
-def main(csv_file: str, csv_extension: str, output_qmd: str, output_yml: str, tadirah_tooltips_path: str) -> None:
+def main(csv_file: str,
+         csv_extension: str,
+         output_qmd: str,
+         output_yml: str,
+         chevron_template_path: str,
+         tadirah_tooltips_path: str) -> None:
     try:
         logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
 
@@ -36,20 +41,20 @@ def main(csv_file: str, csv_extension: str, output_qmd: str, output_yml: str, ta
 
         # Für jeden Experten eine QMD-Datei erstellen
         for e in expert_base.get_expert_as_list():
-            e.parse_qmd(output_directory_path=output_qmd, chevron_template_path="Expert-Base-Builder/html/expert-template.html")
+            e.parse_qmd(output_directory_path=output_qmd, chevron_template_path=chevron_template_path)
 
         # Expert Base als YAML-Datei serialisieren
         expert_base.parse_yml(path=output_yml)
 
-    except Exception as e:
+    except Exception:
         logger.error(f"Ein unerwarteter Fehler ist aufgetreten:", exc_info=True)
         raise
 
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) == 6:
-        logger.error("Die Zahl der übergebenen Argumente ist nicht korrekt, es werden genau 5 erwartet; übergeben wurden"
+    if not len(sys.argv) == 7:
+        logger.error("Die Zahl der übergebenen Argumente ist nicht korrekt, es werden genau 6 erwartet; übergeben wurden"
                      f" {len(sys.argv)} Argumente.")
         sys.exit(1)
 
@@ -58,7 +63,8 @@ if __name__ == "__main__":
         csv_extension=sys.argv[2],  # property_extension.
         output_qmd=sys.argv[3],  # Ausgabeordner für die Detailseiten.
         output_yml=sys.argv[4], # Ausgabeordner für die yml-Datei.
-        tadirah_tooltips_path= sys.argv[5] # Pfad zur tadirah-Datei
+        chevron_template_path=sys.argv[5], # Pfad zum Chevron-Template
+        tadirah_tooltips_path= sys.argv[6] # Pfad zur tadirah-Datei
     )
 
     # python build_expertbase.py data/orcids.csv data/property_extension.csv outputs/expert_qmd outputs/expertbase.yml data/tadirah_tooltips.json
