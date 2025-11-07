@@ -239,7 +239,7 @@ class Expert:
         """
         self.properties[property] = value
 
-    def parse_qmd(self, output_directory_path: str, path: str = "html/expert-template.qmd") -> None:
+    def parse_qmd(self, output_directory_path: str, chevron_template_path: str) -> None:
         """
         Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
@@ -249,7 +249,7 @@ class Expert:
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
 
-        with open(path, "r", encoding="utf-8") as qmd_template:
+        with open(chevron_template_path, "r", encoding="utf-8") as qmd_template:
             template = qmd_template.read()
 
         formated_research_interest = Expert.__format_orcid_keywords(self.get_research_interest(formated=False))
