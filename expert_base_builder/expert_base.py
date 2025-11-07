@@ -179,12 +179,13 @@ class ExpertBase:
         """
         print(json.dumps(self.raw_base, indent=4, ensure_ascii=False))
 
-    def parse_yml(self, path: str) -> None:
+    def parse_yml(self, path: str, filename: str = "expertbase.yml") -> None:
         """
         Diese Methode parst ein Expertbase-Objekt zu einer yaml-Datei, die mit quarto listings kompatibel ist.
 
         Args:
             path: Der Dateipfad und der Name der Ausgabedatei.
+            name: Der Name des Objekts.
         """
 
         logger.info(f"Das Expertbase-Objekt wird zu einer YAML-Datei geparst.")
@@ -210,7 +211,7 @@ class ExpertBase:
 
             entries.append(listing_entry)
 
-        with open(path, "w", encoding="utf-8") as f:
+        with open(os.path.join(path, filename), "w", encoding="utf-8") as f:
             yaml.dump(entries, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
         logger.info(f"Das Expertbase-Objekt wurde erfolgreich zu einer YAML-Datei geparst und unter {path} gespeichert.")
