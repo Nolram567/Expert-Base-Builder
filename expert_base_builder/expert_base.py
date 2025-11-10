@@ -1,10 +1,10 @@
 import os
+import json
 
 from .orcid_aggregator import *
-from expert_base_builder.expert import Expert
+from .expert import Expert
 import logging
 import yaml
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class ExpertBase:
         orcids = read_orcids_from_csv(path)
         tadirah_map = create_tadirah_map(path)
 
-        logger.info(f"Das Expert-Base-Objekt wird mit den ORCID's aus {path} befüllt.")
+        logger.info(f"Das ExpertBase-Objekt wird mit den ORCID's aus {path} befüllt.")
 
         for orcid in orcids:
             logger.info(f"Abfrage von ORCID {orcid}...")
@@ -130,9 +130,6 @@ class ExpertBase:
 
         Args:
             path: Der Dateipfad, unter dem das Expertbase-Objekt abgespeichert werden soll.
-
-        Raises:
-            IOError: Wenn die Datei unter dem spezifizierten Pfad nicht gefunden wurde.
         """
         try:
             with open(path, "r", encoding='utf-8') as f:
@@ -228,9 +225,6 @@ class ExpertBase:
 
         Args:
              path: Der Dateipfad zu der CSV-Datei.
-
-        Raises:
-            IOError: Wenn die CSV-Datei nicht gefunden wurde.
         """
 
         try:
