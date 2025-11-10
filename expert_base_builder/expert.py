@@ -89,7 +89,7 @@ class Expert:
     }
     """
 
-    tadirah_tooltips_path = "data/tadirah_tooltips.json"
+    tadirah_tooltips_path = None
 
     def __init__(self, orcid: str, data: dict):
         """
@@ -121,6 +121,7 @@ class Expert:
         Args:
             formated: Spezifiziert, ob der Name als Einzelstring formatiert zurückgegeben werden soll oder als Tupel mit
             dem Vor- und Nachnamen.
+        Returns: Den Namen als Tupel aus vor uns Nachname oder als String nach dem Muster 'Vorname Nachname'.
         """
         return (
             f"{self.properties.get('Vorname', '')} {self.properties.get('Nachname', '')}"
@@ -142,7 +143,7 @@ class Expert:
             n: Spezifiziert, wie viele Beschäftigungsverhältnisse maximal aufgenommen werden sollen.
 
         Returns:
-            Die derzeitigen Beschäftigungsverhältnisse als Auflistung in natürlicher Sprache aus als Liste aus Tripeln mit Strings.
+            Die derzeitigen Beschäftigungsverhältnisse als Liste aus Tripeln mit Strings oder als formatierte Markdown-Aufzählung.
         """
         current_employment = self.properties.get("Derzeitige Beschäftigung", [])
 
@@ -199,7 +200,9 @@ class Expert:
         Die Methode gibt die Forschungsinteressen (ORCID-Keywords) des Experten zurück.
 
         Args:
-            formated: Falls True, werden die Keywords zu einem String konkateniert und mit Kommata getrennt.
+            formated: Falls True, werden die Keywords zu einem String konkateniert und mit Semikola getrennt.
+
+        Returns: Die ORCID-Keywords mit Semikola getrennt oder als Liste.
         """
 
         if formated:
@@ -244,7 +247,8 @@ class Expert:
         Die Methode generiert auf der Grundlage des Expertenobjekts eine qmd-Seite für den HERMES Hub.
 
         Args:
-            path: Der relative Pfad zu dem Ordner für die Ausgabe des qmd-Dokuments.
+            output_directory_path: Der relative Pfad zu dem Ordner für die Ausgabe des qmd-Dokuments.
+            chevron_template_path: Der Pfad zum Chevron-Template, das für den Bau der Detailseiten verwendet werden soll.
         """
 
         logger.info(f"Das qmd-Dokument für {self.get_name()} wird erstellt...")
@@ -316,7 +320,7 @@ class Expert:
         Args:
             keywords: Die tadirah-Schlagworte als Liste von Strings.
         Returns:
-            Die tadirah Keywords als HTML Markup für die Personenseite
+            Die tadirah Keywords als HTML Markup für die Personenseite.
         """
         if len(keywords) == 1 and "," in keywords[0]:
             keywords = [k.strip() for k in keywords[0].split(",")]
@@ -329,6 +333,3 @@ class Expert:
         builder.append("</div>")
 
         return "".join(builder)
-
-    def set_semantic_properties(self):
-        pass
