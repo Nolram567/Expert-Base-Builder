@@ -86,7 +86,7 @@ class ExpertBase:
                 logger.error(f"Fehler beim Abrufen von Daten oder leere Antwort für ORCID {orcid}")
                 continue
 
-            extracted_name = extraxt_names(person_endpoint_data)
+            extracted_name = extract_names(person_endpoint_data)
             extracted_keywords = extract_keywords(person_endpoint_data)
             extracted_employment = extract_current_employments(activities_endpoint_data)
             extracted_mail = extract_mail(person_endpoint_data)
