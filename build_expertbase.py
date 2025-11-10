@@ -31,13 +31,13 @@ def main(csv_file: str,
     try:
         logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
 
-        expert_base_builder.expert.Expert.tadirah_tooltips_path = tadirah_tooltips_path
+        expert_base_builder.expert.Expert.tadirah_tooltips_path = tadirah_tooltips_path # Den Pfad zu den Tooltips-Texten setzen.
 
-        expert_base = ExpertBase(csv_file, from_csv=True)
+        expert_base = ExpertBase(csv_file, from_csv=True) # Expertbase-Objekt aus der CSV-Datei erzeugen.
 
-        expert_base.serialize_expert_base(path="saved_base", name="backup.json") # Serialisiere die Expert Base als JSON für die Begutachtung.
+        expert_base.serialize_expert_base(path="saved_base", name="backup.json") # Serialisiere die Expertbase als JSON Backup.
 
-        expert_base.add_properties_from_csv(path=csv_extension)
+        expert_base.add_properties_from_csv(path=csv_extension) # Ausgewählte Eigenschaften überschreiben.
 
         # Für jeden Experten eine QMD-Datei erstellen
         for e in expert_base.get_expert_as_list():
@@ -55,17 +55,17 @@ if __name__ == "__main__":
 
     if not len(sys.argv) == 7:
         logger.error("Die Zahl der übergebenen Argumente ist nicht korrekt, es werden genau 6 erwartet; übergeben wurden"
-                     f" {len(sys.argv)} Argumente.")
+                     f" {len(sys.argv)-1} Argumente.")
         sys.exit(1)
 
     main(
-        csv_file=sys.argv[1],  # orcids
-        csv_extension=sys.argv[2],  # property_extension.
+        csv_file=sys.argv[1],  # Pfad zur CSV-Datei mit ORCIDS.
+        csv_extension=sys.argv[2],  # Pfad zur Datei, die die Eigenschaften der Experten überschreiben und ergänzen kann.
         output_qmd=sys.argv[3],  # Ausgabeordner für die Detailseiten.
         output_yml=sys.argv[4], # Ausgabeordner für die yml-Datei.
         chevron_template_path=sys.argv[5], # Pfad zum Chevron-Template
         tadirah_tooltips_path= sys.argv[6] # Pfad zur tadirah-Datei
     )
 
-    # python build_expertbase.py data/orcids.csv data/property_extension.csv outputs/expert_qmd outputs/expertbase.yml data/tadirah_tooltips.json
-    # python Expert-Base-Builder/build_expertbase.py config/orcids.csv config/property_extension.csv Expert-Base-Builder/outputs/ Expert-Base-Builder/outputs/experts
+    # Lokale Ausführung: python build_expertbase.py data/orcids.csv data/property_extension.csv outputs/expert_qmd outputs html/expert-template.qmd data/tadirah_tooltips.json
+    # Ausführung in der Pipeline: python Expert-Base-Builder/build_expertbase.py config/orcids.csv config/property_extension.csv Expert-Base-Builder/outputs/experts Expert-Base-Builder/outputs Expert-Base-Builder/html/expert-template.qmd Expert-Base-Builder/data/tadirah_tooltips.json
