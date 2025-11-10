@@ -1,8 +1,9 @@
 import csv
-import requests
 import logging
 from typing import List
 from datetime import date
+
+import requests
 
 BASE_URL = "https://pub.orcid.org/v3.0/"
 
@@ -17,9 +18,6 @@ def read_orcids_from_csv(file_path: str) -> list[str]:
 
     Returns:
         Liste der ORCID-Bezeichner.
-
-    Raises:
-        IOError: Wenn die Datei unter dem spezifizierten Pfad nicht gefunden wurde.
     """
     orcids = []
     try:
@@ -54,7 +52,7 @@ def fetch_orcid_data(orcid: str, endpoint: str) -> dict | None:
         logger.warning(f"Fehler beim Abrufen von ORCID {orcid}: {response.status_code}")
         return None
 
-def extraxt_names(orcid_data: dict | None) -> dict[str, str]:
+def extract_names(orcid_data: dict | None) -> dict[str, str]:
     """
     Extrahiert die Namen aus einem Personendatensatz.
 
@@ -70,8 +68,8 @@ def extraxt_names(orcid_data: dict | None) -> dict[str, str]:
         return {}
 
     names = orcid_data.get("name", {})
-    extracted["given-names"] = names.get("given-names", {}).get("value", "N/A")
-    extracted["family-name"] = names.get("family-name", {}).get("value", "N/A")
+    extracted["given-names"] = names.get("given-names", {}).get("value", "")
+    extracted["family-name"] = names.get("family-name", {}).get("value", "")
 
     return extracted
 
@@ -88,7 +86,7 @@ def extract_mail(orcid_data: dict | None) -> str:
     email_str = emails[0].get("email", "") if emails else ""
     return email_str
 
-def extract_current_employments(orcid_data: dict | None) -> list:
+def extract_current_employments(orcid_data: dict | None) -> list[str]:
     """
     Extrahiert die derzeit aktiven Beschäftigungsverhältnisse aus einem Personendatensatz.
 
@@ -112,7 +110,7 @@ def extract_current_employments(orcid_data: dict | None) -> list:
                                        )
             continue
 
-        # übersprigen, wenn das Enddatum in der Vergangenheit liegt
+        # überspringen, wenn das Enddatum in der Vergangenheit liegt
         if int(current_summary["end-date"]["year"]['value']) < date.today().year:
             continue
 
@@ -145,10 +143,9 @@ def extract_keywords(orcid_data: dict) -> list[str]:
     Extrahiert eine Liste von Keywords aus einem Personendatensatz.
 
     Args:
-       orcid_data (dict): Die ORCID-Daten vom /person-Endpunkt der ORCID-API.
+       orcid_data: Die ORCID-Daten vom /person-Endpunkt der ORCID-API.
 
-    Returns:
-       List[str]: Eine Liste mit den Keywords der jeweiligen Person als Strings.
+    Returns: Eine Liste mit den Keywords der jeweiligen Person als Strings.
     """
     keywords = []
 
