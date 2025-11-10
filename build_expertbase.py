@@ -1,18 +1,17 @@
 import sys
-
 import logging
 
 import expert_base_builder.expert
 from expert_base_builder.expert_base import ExpertBase
 
 '''
-Konfiguration des Loggers: Die Ausgaben werden sowohl auf der Konsole gedruckt als auch in die Datei "build_expert_base.log"
+Konfiguration des Loggers: Die Ausgaben werden sowohl auf der Konsole gedruckt als auch in die Datei "build_expertbase.log"
 geschrieben, die in der CI-Pipeline als Artefakt gespeichert wird.
 '''
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-file_handler = logging.FileHandler("build_expert_base.log", mode="w", encoding="utf-8")
+file_handler = logging.FileHandler("build_expertbase.log", mode="w", encoding="utf-8")
 file_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
@@ -29,7 +28,7 @@ def main(csv_file: str,
          chevron_template_path: str,
          tadirah_tooltips_path: str) -> None:
     try:
-        logger.info(f"Starte die Verarbeitung der Expert Base mit der Datei: {csv_file}")
+        logger.info(f"Starte die Verarbeitung der Expertbase mit der Datei: {csv_file}")
 
         expert_base_builder.expert.Expert.tadirah_tooltips_path = tadirah_tooltips_path # Den Pfad zu den Tooltips-Texten setzen.
 
