@@ -1,9 +1,9 @@
 import os
 import json
+import logging
 
 from .orcid_aggregator import *
 from .expert import Expert
-import logging
 import yaml
 
 logger = logging.getLogger(__name__)

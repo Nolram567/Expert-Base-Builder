@@ -1,9 +1,10 @@
 import os
 import json
-import chevron
-import requests
 import logging
 import time
+
+import chevron
+import requests
 
 logger = logging.getLogger(__name__)
 
