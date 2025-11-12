@@ -1,6 +1,5 @@
 import csv
 import logging
-from typing import List
 from datetime import date
 
 import requests
