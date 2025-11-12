@@ -4,7 +4,8 @@ Mit diesem Paket wird die [HERMES](https://hermes-hub.de/) Expertbase gebaut. Di
 Forschende im Bereich der Digital Humanities, die auf der Grundlage von ORCID-Datensätzen gebaut wird.
 Ziel und Zweck dieses Programmpakets sind, die HERMES Expertbase vollautomatisch auf Grundlage einer Eingabedatei mit
 ORCID's zu bauen. Die Ausgabe ist eine mit Quarto Listings kompatible yaml-datei, eine qmd-datei für jeden Experten und
-eine Log-Datei. 
+eine Log-Datei.
+
 Perspektivisch soll für jeden Experten zudem ein JSON-LD erstellt und in die Dokumente eingebettet werden,
 damit die Expertbase in den [Culture Knowledge Graph](https://nfdi4culture.de/de/dienste/details/culture-knowledge-graph.html) integriert werden kann.
 
@@ -30,7 +31,7 @@ erreichbar.
 
 ## Installation und lokale Ausführung
 
-Um das Projekt zu installieren, benutze `Poetry`, danach kann das Skript `build_expertbase.py` etwas in der Bash 
+Um das Projekt zu installieren, benutze `Poetry`, danach kann das Skript `build_expertbase.py` etwa in der Bash 
 ausgeführt werden:
 
 ```bash
