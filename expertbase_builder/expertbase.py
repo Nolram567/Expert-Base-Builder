@@ -58,7 +58,7 @@ class ExpertBase:
         if from_csv:
             self.populate_from_csv(filename)
         else:
-            self.deserialize_expert_base(filename)
+            self.deserialize_expertbase(filename)
 
     def populate_from_csv(self, path: str) -> None:
         """
@@ -124,7 +124,7 @@ class ExpertBase:
         """
         return list(self.base.keys())
 
-    def deserialize_expert_base(self, path: str) -> None:
+    def deserialize_expertbase(self, path: str) -> None:
         """
         Die Methode deserialisiert ein Expertbase-Objekt.
 
@@ -151,15 +151,15 @@ class ExpertBase:
             logger.info(f"Das Expertbase-Objekt wurde erfolgreich von {path} eingelesen.")
 
         except IOError as e:
-            logger.error(f"Fehler beim Deserialisieren der Expert Base unter {path}:\n{e}")
+            logger.error(f"Fehler beim Deserialisieren der Expertbase unter {path}:\n{e}")
             raise
 
-    def serialize_expert_base(self, path: str, name: str) -> None:
+    def serialize_expertbase(self, path: str, name: str) -> None:
         """
         Diese Methode serialisiert das Expertbase-Objekt als JSON-Datei.
 
         Args:
-            path: Der Dateipfad, unter dem das Expert Base Objekt serialisiert werden soll.
+            path: Der Dateipfad, unter dem das Expertbase Objekt serialisiert werden soll.
             name: Der Name der Datei.
         """
 
@@ -260,4 +260,4 @@ class ExpertBase:
                     logger.info(f"Für den Experten {current_orcid} wurde die Eigenschaft '{property}'"
                                 f" mit dem Wert '{new_properties}' angelegt oder überschrieben.")
             else:
-                logger.warning(f"Der Experte {current_orcid} ist noch nicht Teil der Expert Base.")
+                logger.warning(f"Der Experte {current_orcid} ist noch nicht Teil der Expertbase.")

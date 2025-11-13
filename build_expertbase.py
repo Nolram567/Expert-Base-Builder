@@ -1,8 +1,8 @@
 import sys
 import logging
 
-import expert_base_builder.expert
-from expert_base_builder.expert_base import ExpertBase
+import expertbase_builder.expert
+from expertbase_builder.expertbase import ExpertBase
 
 '''
 Konfiguration des Loggers: Die Ausgaben werden sowohl auf der Konsole gedruckt als auch in die Datei "build_expertbase.log"
@@ -30,11 +30,11 @@ def main(csv_file: str,
     try:
         logger.info(f"Starte die Verarbeitung der Expertbase mit der Datei: {csv_file}")
 
-        expert_base_builder.expert.Expert.tadirah_tooltips_path = tadirah_tooltips_path # Den Pfad zu den Tooltips-Texten setzen.
+        expertbase_builder.expert.Expert.tadirah_tooltips_path = tadirah_tooltips_path # Den Pfad zu den Tooltips-Texten setzen.
 
         expert_base = ExpertBase(csv_file, from_csv=True) # Expertbase-Objekt aus der CSV-Datei erzeugen.
 
-        expert_base.serialize_expert_base(path="saved_base", name="backup.json") # Serialisiere die Expertbase als JSON Backup.
+        expert_base.serialize_expertbase(path="saved_base", name="backup.json") # Serialisiere die Expertbase als JSON Backup.
 
         expert_base.add_properties_from_csv(path=csv_extension) # Ausgewählte Eigenschaften überschreiben.
 
@@ -42,7 +42,7 @@ def main(csv_file: str,
         for e in expert_base.get_expert_as_list():
             e.parse_qmd(output_directory_path=output_qmd, chevron_template_path=chevron_template_path)
 
-        # Expert Base als YAML-Datei serialisieren
+        # Expertbase als YAML-Datei serialisieren
         expert_base.parse_yml(path=output_yml)
 
     except Exception:
