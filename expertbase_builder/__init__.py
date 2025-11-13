@@ -1,5 +1,5 @@
 from .expert import Expert
-from .expert_base import ExpertBase
+from .expertbase import ExpertBase
 import logging
 
 __all__ = ["Expert", "ExpertBase"]
