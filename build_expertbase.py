@@ -34,7 +34,7 @@ def main(csv_file: str,
 
         expert_base = ExpertBase(csv_file, from_csv=True) # Expertbase-Objekt aus der CSV-Datei erzeugen.
 
-        expert_base.serialize_expertbase(path="saved_base", name="backup.json") # Serialisiere die Expertbase als JSON Backup.
+        #expert_base.serialize_expertbase(path="saved_base", name="backup.json") # Serialisiere die Expertbase als JSON Backup.
 
         expert_base.add_properties_from_csv(path=csv_extension) # Ausgewählte Eigenschaften überschreiben.
 
